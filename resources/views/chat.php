@@ -1,10 +1,9 @@
 <?php
 /**
  * Arrissa AI Chat — /chat
- * Standalone page: login-gated, no sidebar, app design spirit.
+ * Standalone page: login-gated (enforced by root router), no sidebar.
  */
 require_once __DIR__ . '/../../app/Auth.php';
-Auth::check();
 
 // ── Load config ───────────────────────────────────────────────────────────────
 $configFile = __DIR__ . '/../../config/chat.json';

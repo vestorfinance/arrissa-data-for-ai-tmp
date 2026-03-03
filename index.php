@@ -62,6 +62,11 @@ if ($uri === '/settings/update-base-url') {
     exit;
 }
 
+if ($uri === '/settings/chat-config') {
+    include __DIR__ . '/public/settings/chat-config.php';
+    exit;
+}
+
 // Handle search API (no auth required)
 if ($uri === '/api/search') {
     include __DIR__ . '/public/api/search.php';
@@ -226,6 +231,9 @@ switch ($uri) {
         break;
     case '/settings':
         $page = 'settings';
+        break;
+    case '/chat':
+        $page = 'chat';
         break;
     case '/economic-calendar':
         $page = 'economic-calendar';
