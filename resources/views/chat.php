@@ -501,7 +501,8 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
 
         /* 3. Root widget container — fully transparent, no borders */
         .n8n-chat {
-            background: transparent !important;
+            padding: 20px !important;
+            background: var(--chat--body--background) !important;
             border: none !important;
             box-shadow: none !important;
             font-family: 'Inter', -apple-system, sans-serif !important;
