@@ -368,19 +368,26 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
             overflow: hidden !important;
         }
 
-        /* 3. Root widget container */
+        /* 3. Root widget container — fully transparent, no borders */
         .n8n-chat {
-            background: var(--bg-primary) !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
             font-family: 'Inter', -apple-system, sans-serif !important;
             height: 100% !important;
             display: flex !important;
             flex-direction: column !important;
             overflow: hidden !important;
         }
+        /* Kill any border/shadow on every direct child panel */
+        .n8n-chat > * {
+            border: none !important;
+            box-shadow: none !important;
+        }
 
         /* 4. ── MESSAGES AREA — bottom-anchored (ChatGPT pattern) ── */
         .n8n-chat .chat-messages-container {
-            background: var(--bg-primary) !important;
+            background: transparent !important;
             flex: 1 1 0% !important;
             overflow-y: auto !important;
             overflow-x: hidden !important;
@@ -460,12 +467,21 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
         }
 
         /* 6. ── COMPOSER / FOOTER ── */
+        /* Nuclear: kill white background on scoped .chat-inputs regardless of Vue hash */
+        [class*="chat-inputs"] {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
         .n8n-chat .chat-input-container,
         .n8n-chat [class*="chat-footer"],
         .n8n-chat [class*="chatFooter"],
-        .n8n-chat [class*="input-container"] {
-            background: var(--bg-primary) !important;
+        .n8n-chat [class*="input-container"],
+        .n8n-chat [class*="chat-inputs"] {
+            background: transparent !important;
+            border: none !important;
             border-top: none !important;
+            box-shadow: none !important;
             padding: 0 !important;
             padding-bottom: max(20px, env(safe-area-inset-bottom, 20px)) !important;
             flex-shrink: 0 !important;
@@ -513,7 +529,7 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
             opacity: .65 !important;
         }
 
-        /* 7. ── SEND BUTTON — circle pill, teal, inside the input ── */
+        /* 7. ── SEND BUTTON — pill, teal, perfectly centred inside input ── */
         .n8n-chat .chat-input-send-button,
         .n8n-chat [class*="send-button"],
         .n8n-chat button[aria-label*="end"],
@@ -531,9 +547,9 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
             color: #fff !important;
             position: absolute !important;
             right: 30px !important;
-            bottom: 7px !important;
-            top: auto !important;
-            transform: none !important;
+            top: 50% !important;
+            bottom: auto !important;
+            transform: translateY(-50%) !important;
             cursor: pointer !important;
             box-shadow: 0 2px 10px rgba(16,163,127,.4) !important;
             transition: background .15s, transform .12s cubic-bezier(.34,1.56,.64,1), box-shadow .15s !important;
@@ -541,12 +557,12 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
         .n8n-chat .chat-input-send-button:hover,
         .n8n-chat [class*="send-button"]:hover {
             background: #0d8f6b !important;
-            transform: scale(1.1) !important;
+            transform: translateY(-50%) scale(1.1) !important;
             box-shadow: 0 4px 16px rgba(16,163,127,.5) !important;
         }
         .n8n-chat .chat-input-send-button:active,
         .n8n-chat [class*="send-button"]:active {
-            transform: scale(0.92) !important;
+            transform: translateY(-50%) scale(0.92) !important;
             transition-duration: .06s !important;
         }
 
