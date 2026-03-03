@@ -819,6 +819,8 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
         /* ── Responsive ── */
         @media (max-width: 768px) {
             .chat-frame { max-width: 100%; border-left: none; border-right: none; }
+            .n8n-chat { padding: 0 !important; }
+            [class*="chat-inputs"] { padding: 10px !important; }
             .n8n-chat .chat-messages-list,
             .n8n-chat [class*="messages-list"] { padding-left: 16px !important; padding-right: 16px !important; }
             .n8n-chat .chat-input-container > div,
