@@ -270,146 +270,257 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
         }
         .no-webhook-icon svg { width: 28px; height: 28px; color: var(--accent); }
 
-        /* ── n8n CSS tokens ── */
-        :root {
-            --chat--color-primary:            var(--ai-primary);
-            --chat--color-primary-shade-50:   var(--ai-hover);
-            --chat--color-secondary:          var(--ai-primary);
-            --chat--color-light:              var(--bg-secondary);
-            --chat--color-light-shade-50:     var(--bg-tertiary);
-            --chat--color-medium:             var(--border);
-            --chat--color-dark:               var(--bg-primary);
-            --chat--color-white:              var(--text-primary);
-            --chat--border-radius:            16px;
-            --chat--header-height:            0px;
-            --chat--header--padding:          0px;
-            --chat--header--background:       transparent;
-            --chat--header--color:            transparent;
-            --chat--header--border-top:       none;
-            --chat--header--border-bottom:    none;
-            --chat--textarea--height:         56px;
-            --chat--message--font-size:       14.5px;
-            --chat--message--padding:         12px 16px;
-            --chat--message--border-radius:   18px;
-            --chat--message--bot--background: var(--bg-tertiary);
-            --chat--message--bot--color:      var(--text-primary);
-            --chat--message--user--background: var(--ai-primary);
-            --chat--message--user--color:     #fff;
+        /* ═══════════════════════════════════════════════════════════════
+           n8n CHAT — CHATGPT-STYLE REDESIGN
+           Using official CSS variable names from @n8n/chat docs
+        ════════════════════════════════════════════════════════════════ */
+
+        /* 1. Set n8n's own design tokens to match our dark theme */
+        #n8n-chat,
+        .n8n-chat {
+            /* Colors */
+            --chat--color--primary:             #10a37f;
+            --chat--color--primary-shade-50:     #0d8f6b;
+            --chat--color--primary--shade-100:   #0b7a5a;
+            --chat--color--secondary:            #10a37f;
+            --chat--color-secondary-shade-50:    #0d8f6b;
+            --chat--color-white:                 var(--text-primary);
+            --chat--color-light:                 var(--bg-secondary);
+            --chat--color-light-shade-50:        var(--bg-tertiary);
+            --chat--color-light-shade-100:       var(--border);
+            --chat--color-medium:                var(--border);
+            --chat--color-dark:                  var(--bg-primary);
+            --chat--color-disabled:              #555;
+            --chat--color-typing:                var(--text-secondary);
+
+            /* Layout */
+            --chat--spacing:                     1rem;
+            --chat--border-radius:               16px;
+            --chat--transition-duration:         0.15s;
+            --chat--font-family:                 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+            /* Header — hidden */
+            --chat--header-height:               0px;
+            --chat--header--padding:             0px;
+            --chat--header--background:          transparent;
+            --chat--header--color:               transparent;
+            --chat--header--border-top:          none;
+            --chat--header--border-bottom:       none;
+            --chat--header--border-left:         none;
+            --chat--header--border-right:        none;
+
+            /* Messages */
+            --chat--message--font-size:          15px;
+            --chat--message--padding:            11px 16px;
+            --chat--message--border-radius:      20px;
+            --chat--message-line-height:         1.65;
+            --chat--message--margin-bottom:      6px;
+            --chat--message--bot--background:    var(--bg-tertiary);
+            --chat--message--bot--color:         var(--text-primary);
+            --chat--message--bot--border:        none;
+            --chat--message--user--background:   #10a37f;
+            --chat--message--user--color:        #ffffff;
+            --chat--message--user--border:       none;
+            --chat--message--pre--background:    rgba(0,0,0,0.25);
+            --chat--messages-list--padding:      24px 0;
+
+            /* Input area */
+            --chat--textarea--height:            52px;
+            --chat--textarea--max-height:        200px;
+            --chat--input--font-size:            15px;
+            --chat--input--border:               1.5px solid var(--border);
+            --chat--input--border-active:        1.5px solid #10a37f;
+            --chat--input--border-radius:        9999px;
+            --chat--input--padding:              14px 56px 14px 20px;
+            --chat--input--background:           var(--input-bg);
+            --chat--input--text-color:           var(--text-primary);
+            --chat--input--line-height:          1.55;
+
+            /* Send button */
+            --chat--input--send--button--background:       #10a37f;
+            --chat--input--send--button--color:            #ffffff;
+            --chat--input--send--button--background-hover: #0d8f6b;
+            --chat--input--send--button--color-hover:      #ffffff;
+
+            /* Body + footer backgrounds */
+            --chat--body--background:            var(--bg-primary);
+            --chat--footer--background:          var(--bg-primary);
+            --chat--footer--color:               var(--text-primary);
+
+            /* Buttons */
+            --chat--button--border-radius:       9999px;
+            --chat--button--font-size:           14px;
+            --chat--button--background--primary:       #10a37f;
+            --chat--button--color--primary:            #ffffff;
+            --chat--button--background--primary--hover: #0d8f6b;
         }
 
-        /* ── Kill default header ── */
+        /* 2. Hide the n8n default header entirely */
         .n8n-chat .chat-header,
-        .n8n-chat-header,
-        [class*="chat-header"] {
+        .n8n-chat [class*="chat-header"],
+        .n8n-chat [class*="chatHeader"] {
             display: none !important;
             height: 0 !important;
+            min-height: 0 !important;
             padding: 0 !important;
             margin: 0 !important;
+            border: none !important;
             overflow: hidden !important;
         }
 
-        /* ── Root container ── */
+        /* 3. Root widget container */
         .n8n-chat {
             background: var(--bg-primary) !important;
-            color: var(--text-primary) !important;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+            font-family: 'Inter', -apple-system, sans-serif !important;
             height: 100% !important;
             display: flex !important;
             flex-direction: column !important;
             overflow: hidden !important;
         }
 
-        /* ── Messages scroll area ── */
-        .n8n-chat .chat-messages-container,
-        .n8n-chat [class*="messages"] {
+        /* 4. ── MESSAGES AREA — bottom-anchored (ChatGPT pattern) ── */
+        .n8n-chat .chat-messages-container {
             background: var(--bg-primary) !important;
             flex: 1 1 0% !important;
             overflow-y: auto !important;
-            padding: 24px 28px 32px !important;
+            overflow-x: hidden !important;
+            display: flex !important;
+            flex-direction: column !important;
             scrollbar-width: thin;
             scrollbar-color: var(--input-border) transparent;
         }
-        .n8n-chat .chat-messages-container::-webkit-scrollbar { width: 5px; }
+        .n8n-chat .chat-messages-container::-webkit-scrollbar { width: 4px; }
         .n8n-chat .chat-messages-container::-webkit-scrollbar-track { background: transparent; }
         .n8n-chat .chat-messages-container::-webkit-scrollbar-thumb { background: var(--input-border); border-radius: 4px; }
 
-        /* ── Message bubbles ── */
-        .n8n-chat .chat-message { margin-bottom: 4px !important; }
-        .n8n-chat .chat-message .chat-message-markdown,
-        .n8n-chat .chat-message .chat-message-text {
-            font-size: 14.5px !important;
-            line-height: 1.65 !important;
-            letter-spacing: -0.01em !important;
-        }
-        /* bot bubble */
-        .n8n-chat .chat-message-from-bot .chat-message-text,
-        .n8n-chat .chat-messages-message-from-bot .chat-message-text {
-            background: var(--bg-tertiary) !important;
-            color: var(--text-primary) !important;
-            border-radius: 4px 18px 18px 18px !important;
-        }
-        /* user bubble */
-        .n8n-chat .chat-message-from-user .chat-message-text,
-        .n8n-chat .chat-messages-message-from-user .chat-message-text {
-            background: var(--ai-primary) !important;
-            color: #fff !important;
-            border-radius: 18px 4px 18px 18px !important;
+        /* The messages list gets margin-top:auto → pushes it to the bottom when few messages */
+        .n8n-chat .chat-messages-list,
+        .n8n-chat [class*="messages-list"],
+        .n8n-chat ul[class*="message"] {
+            margin-top: auto !important;
+            padding: 20px 0 16px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 2px !important;
+            width: 100% !important;
+            max-width: 720px !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            padding-left: 24px !important;
+            padding-right: 24px !important;
         }
 
-        /* ── Input section — the "composer" ── */
+        /* 5. ── MESSAGE BUBBLES ── */
+        .n8n-chat .chat-message {
+            display: flex !important;
+            flex-direction: column !important;
+            max-width: 78% !important;
+            margin-bottom: 2px !important;
+        }
+
+        /* Bot — left aligned, subtle bubble */
+        .n8n-chat .chat-message-from-bot {
+            align-self: flex-start !important;
+        }
+        .n8n-chat .chat-message-from-bot .chat-message-text {
+            background: var(--bg-tertiary) !important;
+            color: var(--text-primary) !important;
+            border-radius: 4px 20px 20px 20px !important;
+            padding: 11px 16px !important;
+            font-size: 15px !important;
+            line-height: 1.65 !important;
+        }
+
+        /* User — right aligned, teal pill bubble */
+        .n8n-chat .chat-message-from-user {
+            align-self: flex-end !important;
+        }
+        .n8n-chat .chat-message-from-user .chat-message-text {
+            background: #10a37f !important;
+            color: #fff !important;
+            border-radius: 20px 4px 20px 20px !important;
+            padding: 11px 16px !important;
+            font-size: 15px !important;
+            line-height: 1.65 !important;
+        }
+
+        /* code blocks inside bubbles */
+        .n8n-chat .chat-message-text pre,
+        .n8n-chat .chat-message-text code {
+            background: rgba(0,0,0,.28) !important;
+            border-radius: 8px !important;
+            font-size: 13px !important;
+        }
+
+        /* Typing indicator dots */
+        .n8n-chat [class*="typing"] span,
+        .n8n-chat [class*="loading-dots"] span {
+            background: #10a37f !important;
+            border-radius: 50% !important;
+        }
+
+        /* 6. ── COMPOSER / FOOTER ── */
         .n8n-chat .chat-input-container,
         .n8n-chat [class*="chat-footer"],
-        .n8n-chat [class*="input-wrapper"] {
+        .n8n-chat [class*="chatFooter"],
+        .n8n-chat [class*="input-container"] {
             background: var(--bg-primary) !important;
             border-top: none !important;
-            padding: 8px 20px 16px !important;
-            padding-bottom: max(16px, env(safe-area-inset-bottom, 16px)) !important;
+            padding: 0 !important;
+            padding-bottom: max(20px, env(safe-area-inset-bottom, 20px)) !important;
             flex-shrink: 0 !important;
         }
 
-        /* Inner row that wraps textarea + send button */
-        .n8n-chat .chat-input-container > *,
-        .n8n-chat [class*="chat-footer"] > * {
+        /* The actual input row — centred, max-width aligned with messages */
+        .n8n-chat .chat-input-container > div,
+        .n8n-chat [class*="chat-footer"] > div,
+        .n8n-chat [class*="input-row"],
+        .n8n-chat [class*="inputRow"] {
             position: relative !important;
+            max-width: 720px !important;
+            margin: 0 auto !important;
+            padding: 0 24px !important;
         }
 
-        /* The textarea */
+        /* Pill textarea — the main input field */
         .n8n-chat .chat-input,
-        .n8n-chat textarea {
+        .n8n-chat textarea[class*="input"] {
             background: var(--input-bg) !important;
             border: 1.5px solid var(--input-border) !important;
-            border-radius: 16px !important;
+            border-radius: 9999px !important;
             color: var(--text-primary) !important;
             font-size: 15px !important;
             font-family: 'Inter', sans-serif !important;
-            line-height: 1.55 !important;
-            padding: 15px 56px 15px 18px !important;
+            line-height: 1.5 !important;
+            padding: 14px 58px 14px 22px !important;
             resize: none !important;
             width: 100% !important;
-            min-height: 56px !important;
-            max-height: 220px !important;
-            transition: border-color .18s ease, box-shadow .18s ease !important;
-            box-shadow: 0 2px 12px rgba(0,0,0,.18), 0 1px 3px rgba(0,0,0,.12) !important;
+            min-height: 52px !important;
+            max-height: 160px !important;
+            transition: border-color .18s, box-shadow .18s !important;
+            box-shadow: 0 1px 4px rgba(0,0,0,.2), 0 0 0 0px rgba(16,163,127,0) !important;
+            display: block !important;
         }
         .n8n-chat .chat-input:focus,
-        .n8n-chat textarea:focus {
+        .n8n-chat textarea[class*="input"]:focus {
             outline: none !important;
-            border-color: var(--ai-primary) !important;
-            box-shadow: 0 2px 12px rgba(0,0,0,.18), 0 0 0 3px rgba(16,163,127,.18) !important;
+            border-color: #10a37f !important;
+            box-shadow: 0 1px 4px rgba(0,0,0,.2), 0 0 0 3px rgba(16,163,127,.2) !important;
         }
         .n8n-chat .chat-input::placeholder,
-        .n8n-chat textarea::placeholder {
+        .n8n-chat textarea[class*="input"]::placeholder {
             color: var(--text-secondary) !important;
-            opacity: 0.7 !important;
+            opacity: .65 !important;
         }
 
-        /* ── Send button — rounded square, bottom-right anchored ── */
+        /* 7. ── SEND BUTTON — circle pill, teal, inside the input ── */
         .n8n-chat .chat-input-send-button,
         .n8n-chat [class*="send-button"],
-        .n8n-chat button[type="submit"] {
-            background: var(--ai-primary) !important;
+        .n8n-chat button[aria-label*="end"],
+        .n8n-chat button[class*="send"] {
+            background: #10a37f !important;
             border: none !important;
-            border-radius: 11px !important;
+            border-radius: 9999px !important;
             width: 38px !important;
             height: 38px !important;
             min-width: 38px !important;
@@ -419,43 +530,37 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
             justify-content: center !important;
             color: #fff !important;
             position: absolute !important;
-            right: 10px !important;
-            bottom: 10px !important;
+            right: 30px !important;
+            bottom: 7px !important;
             top: auto !important;
             transform: none !important;
             cursor: pointer !important;
+            box-shadow: 0 2px 10px rgba(16,163,127,.4) !important;
             transition: background .15s, transform .12s cubic-bezier(.34,1.56,.64,1), box-shadow .15s !important;
-            box-shadow: 0 2px 8px rgba(16,163,127,.35) !important;
         }
         .n8n-chat .chat-input-send-button:hover,
-        .n8n-chat [class*="send-button"]:hover,
-        .n8n-chat button[type="submit"]:hover {
-            background: var(--ai-hover) !important;
-            transform: scale(1.07) !important;
-            box-shadow: 0 4px 14px rgba(16,163,127,.45) !important;
+        .n8n-chat [class*="send-button"]:hover {
+            background: #0d8f6b !important;
+            transform: scale(1.1) !important;
+            box-shadow: 0 4px 16px rgba(16,163,127,.5) !important;
         }
         .n8n-chat .chat-input-send-button:active,
         .n8n-chat [class*="send-button"]:active {
-            transform: scale(0.94) !important;
+            transform: scale(0.92) !important;
             transition-duration: .06s !important;
         }
 
-        /* Typing / loading dots */
-        .n8n-chat [class*="loading"] span,
-        .n8n-chat [class*="typing"] span {
-            background: var(--ai-primary) !important;
-        }
-
-        /* ── Hint line below textarea ── */
-        .n8n-chat .chat-input-container::after {
-            content: 'Enter to send · Shift + Enter for new line';
+        /* Hint line below composer */
+        .n8n-chat .chat-input-container::after,
+        .n8n-chat [class*="chat-footer"]::after {
+            content: 'Enter to send  ·  Shift + Enter for new line';
             display: block;
             font-size: 11px;
             color: var(--text-secondary);
-            opacity: 0.55;
+            opacity: .45;
             text-align: center;
-            padding-top: 7px;
-            letter-spacing: .01em;
+            padding-top: 8px;
+            letter-spacing: .015em;
         }
 
         /* ── Loading spinner ── */
@@ -468,7 +573,7 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
         .chat-spinner {
             width: 32px; height: 32px;
             border: 2.5px solid var(--bg-tertiary);
-            border-top-color: var(--ai-primary);
+            border-top-color: #10a37f;
             border-radius: 50%;
             animation: spin .75s linear infinite;
         }
@@ -491,10 +596,11 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
         /* ── Responsive ── */
         @media (max-width: 768px) {
             .chat-frame { max-width: 100%; border-left: none; border-right: none; }
-            #chat-area { padding: 0; }
-            .n8n-chat .chat-messages-container { padding: 16px 16px 0 !important; }
-            .n8n-chat .chat-input-container,
-            .n8n-chat [class*="chat-footer"] { padding: 8px 12px 12px !important; }
+            .n8n-chat .chat-messages-list,
+            .n8n-chat [class*="messages-list"] { padding-left: 16px !important; padding-right: 16px !important; }
+            .n8n-chat .chat-input-container > div,
+            .n8n-chat [class*="chat-footer"] > div { padding: 0 14px !important; }
+            .n8n-chat .chat-input-send-button { right: 20px !important; }
         }
     </style>
 </head>
