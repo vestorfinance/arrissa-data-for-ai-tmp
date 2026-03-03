@@ -993,7 +993,7 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
     <!-- ── Powered by (desktop) ── -->
     <footer id="powered-by-footer">
         <span class="pb-dot"></span>
-        Powered by <a href="/chat">Arrissa AI</a>
+        Powered by <a href="https://arrissadata.com/get" target="_blank" rel="noopener">Arrissa AI</a>
         <span class="pb-dot"></span>
     </footer>
 
