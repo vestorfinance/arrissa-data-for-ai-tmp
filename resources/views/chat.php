@@ -1054,6 +1054,7 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
                         .filter(k => k.includes('n8n-chat'))
                         .forEach(k => localStorage.removeItem(k));
                     initChat();
+                    injectLateStyles();
                 }
             } catch (e) { console.error(e); }
         };
@@ -1064,9 +1065,56 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
                 .filter(k => k.includes('n8n-chat'))
                 .forEach(k => localStorage.removeItem(k));
             initChat();
+            injectLateStyles();
         };
 
         initChat();
+
+        // Inject override styles AFTER n8n widget — guarantees our rules beat widget-injected styles
+        function injectLateStyles() {
+            const s = document.createElement('style');
+            s.id = 'arrissa-late-overrides';
+            s.textContent = `
+                .n8n-chat .chat-input-send-button,
+                .n8n-chat [class*="send-button"],
+                .n8n-chat button[aria-label*="end"],
+                .n8n-chat button[class*="send"] {
+                    position: absolute !important;
+                    right: 10px !important;
+                    top: 38% !important;
+                    bottom: 0 !important;
+                    transform: translateY(-50%) !important;
+                    width: 48px !important;
+                    height: 48px !important;
+                    border-radius: 9999px !important;
+                    background: #10a37f !important;
+                    border: none !important;
+                    color: #fff !important;
+                    cursor: pointer !important;
+                }
+                @media (max-width: 768px) {
+                    .n8n-chat .chat-input-send-button,
+                    .n8n-chat [class*="send-button"],
+                    .n8n-chat button[aria-label*="end"],
+                    .n8n-chat button[class*="send"] {
+                        right: 17px !important;
+                    }
+                }
+                .n8n-chat .chat-input,
+                .n8n-chat textarea[class*="input"],
+                [class*="chat-inputs"] textarea {
+                    background: transparent !important;
+                    border: none !important;
+                    border-radius: 0 !important;
+                    box-shadow: none !important;
+                    outline: none !important;
+                }
+            `;
+            const old = document.getElementById('arrissa-late-overrides');
+            if (old) old.remove();
+            document.head.appendChild(s);
+        }
+        injectLateStyles();
     </script>
 
     <script>
