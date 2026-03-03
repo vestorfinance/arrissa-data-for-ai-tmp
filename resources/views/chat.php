@@ -655,19 +655,18 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
         /* Outer wrapper — THIS is the visible rounded pill box */
         [class*="chat-inputs"] {
             background: var(--input-bg) !important;
-            border: 1.5px solid var(--input-border) !important;
+            border: none !important;
             border-radius: 25px !important;
             overflow: hidden !important;
             box-shadow: 0 1px 4px rgba(0,0,0,.2) !important;
-            padding: 0 !important;
-            margin: 10px !important;
-            margin-bottom: 10px !important;
-            transition: border-color .18s, box-shadow .18s !important;
+            padding: 20px !important;
+            margin: 0 !important;
+            margin-bottom: 20px !important;
+            transition: box-shadow .18s !important;
             display: flex !important;
             align-items: flex-end !important;
         }
         [class*="chat-inputs"]:focus-within {
-            border-color: #10a37f !important;
             box-shadow: 0 1px 4px rgba(0,0,0,.2), 0 0 0 3px rgba(16,163,127,.2) !important;
         }
         .n8n-chat .chat-input-container,
