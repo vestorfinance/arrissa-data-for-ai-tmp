@@ -1143,6 +1143,12 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
                     box-shadow: none !important;
                     outline: none !important;
                 }
+                /* Hide n8n branding */
+                [class*="chat-powered-by"],
+                [class*="powered-by"],
+                .n8n-chat a[href*="n8n.io"],
+                .n8n-chat a[href*="n8n.io"] ~ *,
+                .n8n-chat footer { display: none !important; }
             `;
             const old = document.getElementById('arrissa-late-overrides');
             if (old) old.remove();
@@ -1154,11 +1160,29 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
     <script>
         feather.replace();
 
-        // Dismiss page loader once everything (fonts, scripts, widget) is ready
-        window.addEventListener('load', function() {
+        // Dismiss loader only after the n8n widget has rendered its input
+        (function() {
             const loader = document.getElementById('page-loader');
-            if (loader) loader.classList.add('hidden');
-        });
+            if (!loader) return;
+
+            function dismiss() {
+                // Small delay so the widget paint is flushed before we reveal
+                setTimeout(function() { loader.classList.add('hidden'); }, 120);
+            }
+
+            // Watch #chat-area for the textarea that n8n injects
+            const observer = new MutationObserver(function() {
+                if (document.querySelector('#chat-area textarea, #chat-area [class*="chat-input"]')) {
+                    observer.disconnect();
+                    dismiss();
+                }
+            });
+            const target = document.getElementById('chat-area') || document.body;
+            observer.observe(target, { childList: true, subtree: true });
+
+            // Fallback: never leave the user stuck
+            setTimeout(function() { observer.disconnect(); dismiss(); }, 7000);
+        })();
 
         // Mobile sidebar
         function openSidebar() {
