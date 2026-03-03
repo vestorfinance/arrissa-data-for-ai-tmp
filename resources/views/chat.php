@@ -161,7 +161,7 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
 
         .topbar-title {
             font-weight: 700;
-            font-size: 15px;
+            font-size: 20px;
             color: var(--text-primary);
             white-space: nowrap;
             flex-shrink: 0;
