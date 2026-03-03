@@ -825,7 +825,8 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
             .n8n-chat [class*="messages-list"] { padding-left: 16px !important; padding-right: 16px !important; }
             .n8n-chat .chat-input-container > div,
             .n8n-chat [class*="chat-footer"] > div { padding: 0 14px !important; }
-            .n8n-chat .chat-input-send-button { right: 20px !important; }
+            .n8n-chat .chat-input-send-button,
+            .n8n-chat [class*="send-button"] { right: 12px !important; }
         }
     </style>
 </head>
