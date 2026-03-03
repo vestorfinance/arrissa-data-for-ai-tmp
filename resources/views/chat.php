@@ -236,8 +236,7 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
             display: flex;
             flex-direction: column;
             background: var(--card-bg);
-            border-left: 1px solid var(--border);
-            border-right: 1px solid var(--border);
+            border: none !important;
             overflow: hidden;
         }
 
@@ -472,18 +471,28 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
             background: transparent !important;
             border: none !important;
             box-shadow: none !important;
+            padding: 10px !important;
+            padding-bottom: 0 !important;
+            margin-bottom: 0 !important;
         }
         .n8n-chat .chat-input-container,
-        .n8n-chat [class*="chat-footer"],
         .n8n-chat [class*="chatFooter"],
-        .n8n-chat [class*="input-container"],
-        .n8n-chat [class*="chat-inputs"] {
+        .n8n-chat [class*="input-container"] {
             background: transparent !important;
             border: none !important;
             border-top: none !important;
             box-shadow: none !important;
             padding: 0 !important;
-            padding-bottom: max(20px, env(safe-area-inset-bottom, 20px)) !important;
+            padding-bottom: 0 !important;
+            flex-shrink: 0 !important;
+        }
+        .n8n-chat [class*="chat-footer"] {
+            background: var(--bg-primary) !important;
+            border: none !important;
+            border-top: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            padding-bottom: 0 !important;
             flex-shrink: 0 !important;
         }
 
@@ -529,7 +538,7 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
             opacity: .65 !important;
         }
 
-        /* 7. ── SEND BUTTON — pill, teal, perfectly centred inside input ── */
+        /* 7. ── SEND BUTTON — pill, teal ── */
         .n8n-chat .chat-input-send-button,
         .n8n-chat [class*="send-button"],
         .n8n-chat button[aria-label*="end"],
@@ -537,18 +546,18 @@ $firstModel    = $availableModels[$selectedModel] ?? reset($availableModels);
             background: #10a37f !important;
             border: none !important;
             border-radius: 9999px !important;
-            width: 38px !important;
-            height: 38px !important;
-            min-width: 38px !important;
-            min-height: 38px !important;
+            width: 48px !important;
+            height: 48px !important;
+            min-width: 48px !important;
+            min-height: 48px !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
             color: #fff !important;
             position: absolute !important;
-            right: 30px !important;
-            top: 50% !important;
-            bottom: auto !important;
+            right: 7px !important;
+            top: 38% !important;
+            bottom: 0px !important;
             transform: translateY(-50%) !important;
             cursor: pointer !important;
             box-shadow: 0 2px 10px rgba(16,163,127,.4) !important;
