@@ -838,6 +838,10 @@ _Tz8wKpN4::_v();
                     <i data-feather="activity" style="width: 20px; height: 20px;"></i>
                     <span class="text-base font-medium">TMA + CG API Guide</span>
                 </a>
+                <a href="/mcp-guide" class="sidebar-link <?php echo ($page ?? '') == 'mcp-guide' ? 'active' : ''; ?> flex items-center space-x-3 px-4 py-2 rounded-full mb-1" style="color: <?php echo ($page ?? '') == 'mcp-guide' ? 'var(--text-primary)' : 'var(--text-secondary)'; ?>;">
+                    <i data-feather="cpu" style="width: 20px; height: 20px;"></i>
+                    <span class="text-base font-medium">MCP Server Guide</span>
+                </a>
                 <?php
                     $tmpSubPages = ['tmp-guide', 'tmp-manage'];
                     $tmpGroupOpen = in_array($page ?? '', $tmpSubPages);
