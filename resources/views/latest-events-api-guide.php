@@ -175,7 +175,7 @@ ob_start();
             </div>
             <div>
                 <h2 class="text-2xl font-bold" style="color: var(--text-primary);">Example Requests</h2>
-                <p class="text-sm" style="color: var(--text-secondary);">Copy and use directly</p>
+                <p class="text-sm" style="color: var(--text-secondary);">Click <strong>Try Example</strong> on any card to test the API in real-time</p>
             </div>
         </div>
 
@@ -189,6 +189,12 @@ ob_start();
                 </div>
                 <pre class="p-4 rounded-xl overflow-x-auto api-code" style="background-color:var(--bg-primary);border:1px solid var(--border);color:var(--text-secondary);white-space:pre-wrap;word-break:break-all;"><?php echo htmlspecialchars($baseUrl); ?>/api/latest-events
   ?api_key=<?php echo htmlspecialchars($apiKey); ?></pre>
+                <div class="mt-3">
+                    <a href="<?php echo htmlspecialchars($baseUrl); ?>/api/latest-events?api_key=<?php echo htmlspecialchars($apiKey); ?>" target="_blank" class="inline-flex items-center text-xs font-medium" style="color:var(--accent);">
+                        <span>Try Example</span>
+                        <i data-feather="arrow-right" class="ml-1" style="width:14px;height:14px;"></i>
+                    </a>
+                </div>
             </div>
 
             <!-- Filter by currency -->
@@ -201,6 +207,12 @@ ob_start();
   ?api_key=<?php echo htmlspecialchars($apiKey); ?>
 
   &currency=USD,EUR</pre>
+                <div class="mt-3">
+                    <a href="<?php echo htmlspecialchars($baseUrl); ?>/api/latest-events?api_key=<?php echo htmlspecialchars($apiKey); ?>&currency=USD,EUR" target="_blank" class="inline-flex items-center text-xs font-medium" style="color:var(--accent);">
+                        <span>Try Example</span>
+                        <i data-feather="arrow-right" class="ml-1" style="width:14px;height:14px;"></i>
+                    </a>
+                </div>
             </div>
 
             <!-- High impact only -->
@@ -214,6 +226,12 @@ ob_start();
 
   &impact=High
   &must_have=actual</pre>
+                <div class="mt-3">
+                    <a href="<?php echo htmlspecialchars($baseUrl); ?>/api/latest-events?api_key=<?php echo htmlspecialchars($apiKey); ?>&impact=High&must_have=actual" target="_blank" class="inline-flex items-center text-xs font-medium" style="color:var(--accent);">
+                        <span>Try Example</span>
+                        <i data-feather="arrow-right" class="ml-1" style="width:14px;height:14px;"></i>
+                    </a>
+                </div>
             </div>
 
             <!-- Specific event types -->
@@ -226,6 +244,12 @@ ob_start();
   ?api_key=<?php echo htmlspecialchars($apiKey); ?>
 
   &event_id=USD_NFP,USD_CPI,USD_FOMC_INTEREST_RATE</pre>
+                <div class="mt-3">
+                    <a href="<?php echo htmlspecialchars($baseUrl); ?>/api/latest-events?api_key=<?php echo htmlspecialchars($apiKey); ?>&event_id=USD_NFP,USD_CPI,USD_FOMC_INTEREST_RATE" target="_blank" class="inline-flex items-center text-xs font-medium" style="color:var(--accent);">
+                        <span>Try Example</span>
+                        <i data-feather="arrow-right" class="ml-1" style="width:14px;height:14px;"></i>
+                    </a>
+                </div>
             </div>
 
             <!-- Pretend date — backtesting -->
@@ -242,8 +266,14 @@ ob_start();
   &must_have=actual
   &pretend_date=2026-01-15
   &pretend_time=08:30:00</pre>
-                <div class="mt-4 highlight-box">
-                    <p class="text-xs" style="color:var(--text-secondary);">Use <code style="color:var(--accent)">pretend_date</code> + <code style="color:var(--accent)">pretend_time</code> to replay history. Returns only events whose date/time ≤ the pretend cutoff — giving you the same snapshot the AI would have seen at that exact moment.</p>
+                <div class="mt-4 flex items-center justify-between">
+                    <div class="highlight-box flex-1">
+                        <p class="text-xs" style="color:var(--text-secondary);">Use <code style="color:var(--accent)">pretend_date</code> + <code style="color:var(--accent)">pretend_time</code> to replay history. Returns only events whose date/time ≤ the pretend cutoff — giving you the same snapshot the AI would have seen at that exact moment.</p>
+                    </div>
+                    <a href="<?php echo htmlspecialchars($baseUrl); ?>/api/latest-events?api_key=<?php echo htmlspecialchars($apiKey); ?>&currency=USD&impact=High&must_have=actual&pretend_date=2026-01-15&pretend_time=08:30:00" target="_blank" class="inline-flex items-center text-xs font-medium ml-6 flex-shrink-0" style="color:var(--accent);">
+                        <span>Try Example</span>
+                        <i data-feather="arrow-right" class="ml-1" style="width:14px;height:14px;"></i>
+                    </a>
                 </div>
             </div>
         </div>
