@@ -63,55 +63,65 @@ if ($pretend_date) {
 
 $cutoffDatetime = $cutoff->format('Y-m-d') . 'T' . $cutoff->format('H:i:s');
 
-// ── Build filters for the inner subquery ─────────────────────────────────────
-$filterSql    = '';
-$filterParams = [];
+// ── Build filters — generated twice with different param keys ─────────────────
+// inner = used in subquery, outer = used in outer WHERE
+$filterSqlInner    = '';
+$filterSqlOuter    = '';
+$filterParamsInner = [];
+$filterParamsOuter = [];
 
 // Currency
 if ($currency !== '') {
     $codes   = array_filter(array_map('strtoupper', array_map('trim', explode(',', $currency))));
-    $holders = [];
+    $hIn = []; $hOut = [];
     foreach ($codes as $i => $c) {
-        $key            = ":cur{$i}";
-        $holders[]      = $key;
-        $filterParams[$key] = $c;
+        $filterParamsInner[":curi{$i}"] = $c;
+        $filterParamsOuter[":curo{$i}"] = $c;
+        $hIn[]  = ":curi{$i}";
+        $hOut[] = ":curo{$i}";
     }
-    if ($holders) {
-        $filterSql .= " AND currency IN (" . implode(',', $holders) . ")";
+    if ($hIn) {
+        $filterSqlInner .= " AND currency IN (" . implode(',', $hIn) . ")";
+        $filterSqlOuter .= " AND e.currency IN (" . implode(',', $hOut) . ")";
     }
 }
 
 // Event ID (consistent_event_id)
 if ($event_id !== '') {
-    $ids     = array_filter(array_map('strtoupper', array_map('trim', explode(',', $event_id))));
-    $holders = [];
+    $ids = array_filter(array_map('strtoupper', array_map('trim', explode(',', $event_id))));
+    $hIn = []; $hOut = [];
     foreach ($ids as $i => $id) {
-        $key            = ":eid{$i}";
-        $holders[]      = $key;
-        $filterParams[$key] = $id;
+        $filterParamsInner[":eidi{$i}"] = $id;
+        $filterParamsOuter[":eido{$i}"] = $id;
+        $hIn[]  = ":eidi{$i}";
+        $hOut[] = ":eido{$i}";
     }
-    if ($holders) {
-        $filterSql .= " AND consistent_event_id IN (" . implode(',', $holders) . ")";
+    if ($hIn) {
+        $filterSqlInner .= " AND consistent_event_id IN (" . implode(',', $hIn) . ")";
+        $filterSqlOuter .= " AND e.consistent_event_id IN (" . implode(',', $hOut) . ")";
     }
 }
 
 // Impact
 if ($impact !== '') {
-    $levels  = array_filter(array_map('trim', explode(',', $impact)));
-    $holders = [];
+    $levels = array_filter(array_map('trim', explode(',', $impact)));
+    $hIn = []; $hOut = [];
     foreach ($levels as $i => $lv) {
-        $key            = ":imp{$i}";
-        $holders[]      = $key;
-        $filterParams[$key] = ucfirst(strtolower($lv));
+        $filterParamsInner[":impi{$i}"] = ucfirst(strtolower($lv));
+        $filterParamsOuter[":impo{$i}"] = ucfirst(strtolower($lv));
+        $hIn[]  = ":impi{$i}";
+        $hOut[] = ":impo{$i}";
     }
-    if ($holders) {
-        $filterSql .= " AND impact_level IN (" . implode(',', $holders) . ")";
+    if ($hIn) {
+        $filterSqlInner .= " AND impact_level IN (" . implode(',', $hIn) . ")";
+        $filterSqlOuter .= " AND e.impact_level IN (" . implode(',', $hOut) . ")";
     }
 }
 
 // must_have actual_value
 if (strtolower($must_have) === 'actual') {
-    $filterSql .= " AND actual_value IS NOT NULL AND actual_value != '' AND actual_value != 'TBD'";
+    $filterSqlInner .= " AND actual_value IS NOT NULL AND actual_value != '' AND actual_value != 'TBD'";
+    $filterSqlOuter .= " AND e.actual_value IS NOT NULL AND e.actual_value != '' AND e.actual_value != 'TBD'";
 }
 
 // ── Main query ────────────────────────────────────────────────────────────────
@@ -133,16 +143,18 @@ $sql = "
         WHERE (event_date || 'T' || event_time) <= :cutoff
           AND consistent_event_id IS NOT NULL
           AND consistent_event_id != ''
-          {$filterSql}
+          {$filterSqlInner}
         GROUP BY consistent_event_id
     ) latest
       ON  e.consistent_event_id = latest.consistent_event_id
       AND (e.event_date || 'T' || e.event_time) = latest.max_dt
+    WHERE (e.event_date || 'T' || e.event_time) <= :cutoff
+      {$filterSqlOuter}
     ORDER BY e.currency ASC, e.event_name ASC
 ";
 
-$params              = $filterParams;
-$params[':cutoff']   = $cutoffDatetime;
+$params            = array_merge($filterParamsInner, $filterParamsOuter);
+$params[':cutoff'] = $cutoffDatetime;
 
 try {
     $stmt = $pdo->prepare($sql);
