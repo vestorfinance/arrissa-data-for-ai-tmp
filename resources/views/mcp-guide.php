@@ -312,22 +312,23 @@ sudo systemctl status arrissa-mcp</pre>
             <div class="mcp-step" id="mcp-caddy">
                 <div class="mcp-step-title"><span class="mcp-step-num">4</span>Expose via Caddy</div>
                 <div class="mcp-step-body">
-                    <p>Add a route to your Caddyfile so the MCP endpoint is available at <code class="mcp-hl-domain mcp-inline" id="u-mcp-path">https://mcp.yourdomain.com/mcp</code>:</p>
+                    <p>Run this command to <strong style="color:var(--text-primary);">append</strong> the MCP block to your existing Caddyfile and reload — the endpoint will be live at <code class="mcp-hl-domain mcp-inline" id="u-mcp-path">https://mcp.yourdomain.com/mcp</code>:</p>
                     <div class="mcp-code-block">
-                        <span class="mcp-code-lang">caddyfile</span>
+                        <span class="mcp-code-lang">bash</span>
                         <button class="mcp-copy-btn" onclick="mcpCopyCode(this)"><i data-feather="copy" style="width:10px;height:10px;"></i> Copy</button>
-                        <pre id="u-caddy-block">mcp.yourdomain.com {
+                        <pre id="u-caddy-block">sudo tee -a /etc/caddy/Caddyfile &lt;&lt;'EOF'
+
+mcp.yourdomain.com {
     reverse_proxy localhost:3000
     encode gzip
 }
+EOF
 
-# Alternatively, add inside your main domain block:
-# handle /mcp* { reverse_proxy localhost:3000 }</pre>
+sudo systemctl reload caddy</pre>
                     </div>
-                    <div class="mcp-code-block" style="margin-top:10px;">
-                        <span class="mcp-code-lang">bash</span>
-                        <button class="mcp-copy-btn" onclick="mcpCopyCode(this)"><i data-feather="copy" style="width:10px;height:10px;"></i> Copy</button>
-                        <pre>sudo systemctl reload caddy</pre>
+                    <div class="mcp-callout mcp-callout-info" style="margin-top:10px;">
+                        <i data-feather="info" class="mcp-callout-icon" style="width:15px;height:15px;color:var(--accent);"></i>
+                        <span>Prefer a path route? Replace the block above with: <code class="mcp-inline">handle /mcp* { reverse_proxy localhost:3000 }</code> inside your existing domain block — then the endpoint is <code class="mcp-inline" id="u-mcp-path-alt">https://yourdomain.com/mcp</code></span>
                     </div>
                     <p style="margin-top:12px;">Verify the server is up:</p>
                     <div class="mcp-code-block">
@@ -889,6 +890,8 @@ function mcpUpdateAll() {
 
     // Caddy block
     mcpSetCode('u-caddy-block', el => el.replace(/mcp\.yourdomain\.com/g, `mcp.${domain}`).replace(/yourdomain\.com/g, domain).replace(/localhost:3000/g, `localhost:${port}`));
+    var pathAlt = document.getElementById('u-mcp-path-alt');
+    if (pathAlt) pathAlt.textContent = `https://${domain}/mcp`;
     // MCP path hint
     var pathEl = document.getElementById('u-mcp-path');
     if (pathEl) pathEl.textContent = `https://mcp.${domain}/mcp`;
