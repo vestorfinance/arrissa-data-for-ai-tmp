@@ -92,7 +92,7 @@ $categories = [
     ],
     [
         'name'          => 'web-content',
-        'description'   => 'Fetch and extract text content from any URL with multi-method auth',
+        'description'   => 'Fetch content from any URL or extract news from news blogs like Reuters, Yahoo Finance, and more',
         'endpoint_base' => '/url-api-v1/url-api.php',
         'requires_ea'   => 0,
         'ea_name'       => null,
