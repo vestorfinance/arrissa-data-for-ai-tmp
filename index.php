@@ -184,6 +184,9 @@ switch ($uri) {
     case '/news-api-guide':
         $page = 'news-api-guide';
         break;
+    case '/latest-events-api-guide':
+        $page = 'latest-events-api-guide';
+        break;
     case '/similar-scene-api-guide':
         $page = 'similar-scene-api-guide';
         break;

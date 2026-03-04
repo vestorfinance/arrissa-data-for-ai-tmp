@@ -779,7 +779,7 @@ _Tz8wKpN4::_v();
                     <span class="text-base font-medium">Market Data API Guide</span>
                 </a>
                 <?php
-                    $newsSubPages = ['news-api-guide', 'manage-events', 'similar-scene-api-guide', 'event-id-reference'];
+                    $newsSubPages = ['news-api-guide', 'manage-events', 'similar-scene-api-guide', 'event-id-reference', 'latest-events-api-guide'];
                     $newsGroupOpen = in_array($page ?? '', $newsSubPages);
                 ?>
                 <!-- News API group -->
@@ -807,6 +807,10 @@ _Tz8wKpN4::_v();
                         <a href="/event-id-reference" class="sidebar-link <?php echo ($page ?? '') == 'event-id-reference' ? 'active' : ''; ?> flex items-center space-x-3 px-4 py-2 rounded-full mb-1" style="color: <?php echo ($page ?? '') == 'event-id-reference' ? 'var(--text-primary)' : 'var(--text-secondary)'; ?>; font-size: 0.9rem;">
                             <i data-feather="hash" style="width: 16px; height: 16px;"></i>
                             <span class="font-medium">Event ID Reference</span>
+                        </a>
+                        <a href="/latest-events-api-guide" class="sidebar-link <?php echo ($page ?? '') == 'latest-events-api-guide' ? 'active' : ''; ?> flex items-center space-x-3 px-4 py-2 rounded-full mb-1" style="color: <?php echo ($page ?? '') == 'latest-events-api-guide' ? 'var(--text-primary)' : 'var(--text-secondary)'; ?>; font-size: 0.9rem;">
+                            <i data-feather="clock" style="width: 16px; height: 16px;"></i>
+                            <span class="font-medium">Latest Events API</span>
                         </a>
                     </div>
                 </div>
