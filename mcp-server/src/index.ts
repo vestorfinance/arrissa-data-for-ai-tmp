@@ -124,12 +124,12 @@ app.get("/", (_req, res) => {
     transport: "HTTP Streamable (MCP 2025-03-26 spec)",
     endpoint: "/mcp",
     health: "/health",
-    tools: 63,
+    tools: 67,
     categories: [
       "market-data (8 tools)",
       "chart-images (9 tools)",
       "economic-calendar (15 tools)",
-      "orders (20 tools)",
+      "orders (24 tools)",
       "market-analysis (3 tools)",
       "web-content (8 tools)",
     ],
@@ -141,5 +141,5 @@ app.listen(PORT, HOST, () => {
   console.log(`\nListening on http://${HOST}:${PORT}`);
   console.log(`  MCP endpoint : http://${HOST}:${PORT}/mcp`);
   console.log(`  Health check : http://${HOST}:${PORT}/health`);
-  console.log(`  Ready — 63 tools registered across 6 categories.\n`);
+  console.log(`  Ready — 67 tools registered across 6 categories.\n`);
 });

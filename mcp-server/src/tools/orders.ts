@@ -281,4 +281,44 @@ export function registerOrdersTools(server: McpServer, config: Config): void {
       content: await fetchJson(buildUrl(config, PATH, { profit })),
     })
   );
+
+  // 53. get_account_info
+  server.tool(
+    "get_account_info",
+    "Get full MT5 account information: account name, account number, broker, server, currency, balance, equity, margin, free margin, margin level %, running floating P/L, number of open positions, leverage, and trade mode (Real/Demo).",
+    {},
+    async () => ({
+      content: await fetchJson(buildUrl(config, PATH, { account_info: "1" })),
+    })
+  );
+
+  // 54. get_account_balance
+  server.tool(
+    "get_account_balance",
+    "Get the current MT5 account balance (closed-trades balance, excluding floating P/L). Also returns equity and currency for context.",
+    {},
+    async () => ({
+      content: await fetchJson(buildUrl(config, PATH, { account_info: "1" })),
+    })
+  );
+
+  // 55. get_account_equity
+  server.tool(
+    "get_account_equity",
+    "Get the current MT5 account equity (balance + floating P/L on all open positions).",
+    {},
+    async () => ({
+      content: await fetchJson(buildUrl(config, PATH, { account_info: "1" })),
+    })
+  );
+
+  // 56. get_running_profit
+  server.tool(
+    "get_running_profit",
+    "Get the total floating (unrealised) profit/loss across all currently open MT5 positions, including swap.",
+    {},
+    async () => ({
+      content: await fetchJson(buildUrl(config, PATH, { account_info: "1" })),
+    })
+  );
 }

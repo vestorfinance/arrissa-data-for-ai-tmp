@@ -96,7 +96,7 @@ code.mcp-inline { background-color: var(--bg-tertiary); padding: 2px 7px; border
                     <div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#4f46e5,#10b981);display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:900;color:#fff;letter-spacing:-0.03em;flex-shrink:0;">MCP</div>
                     <div>
                         <h1 class="text-3xl font-bold tracking-tight" style="color:var(--text-primary);">MCP Server Guide</h1>
-                        <p style="color:var(--text-secondary);font-size:0.875rem;margin:2px 0 0;">Connect 63 tools — market data, calendar, charts, orders — to Claude, Cursor, or any AI client.</p>
+                        <p style="color:var(--text-secondary);font-size:0.875rem;margin:2px 0 0;">Connect 67 tools — market data, calendar, charts, orders — to Claude, Cursor, or any AI client.</p>
                     </div>
                 </div>
             </div>
@@ -221,7 +221,7 @@ code.mcp-inline { background-color: var(--bg-tertiary); padding: 2px 7px; border
             <a href="#mcp-claude">Claude Desktop</a>
             <a href="#mcp-cursor">Cursor</a>
             <a href="#mcp-test">Test the Server</a>
-            <a href="#mcp-tools">All 63 Tools</a>
+            <a href="#mcp-tools">All 67 Tools</a>
         </aside>
 
         <div class="mcp-main">
@@ -734,7 +734,7 @@ Start-ScheduledTask -TaskName "ArrissaMCPServer"</pre>
             <i data-feather="tool" style="width:20px;height:20px;color:#fff;"></i>
         </div>
         <div>
-            <h2>All 63 Tools</h2>
+            <h2>All 67 Tools</h2>
             <p>Grouped by category — every tool is available to any connected AI client</p>
         </div>
     </div>
@@ -817,7 +817,7 @@ Start-ScheduledTask -TaskName "ArrissaMCPServer"</pre>
                 <span class="mcp-step-num" style="background:linear-gradient(135deg,#dc2626,#ef4444);">
                     <i data-feather="shopping-cart" style="width:12px;height:12px;"></i>
                 </span>
-                Orders — 20 tools
+                Orders — 24 tools
             </div>
             <div class="mcp-step-body">
                 <ul class="mcp-tool-list">
@@ -829,6 +829,7 @@ Start-ScheduledTask -TaskName "ArrissaMCPServer"</pre>
                     <li><i data-feather="chevron-right" style="width:13px;height:13px;color:var(--accent);flex-shrink:0;margin-top:4px;"></i><span><code class="mcp-inline">get_trade_history</code> / <code class="mcp-inline">get_best_trades</code> / <code class="mcp-inline">get_worst_trades</code></span></li>
                     <li><i data-feather="chevron-right" style="width:13px;height:13px;color:var(--accent);flex-shrink:0;margin-top:4px;"></i><span><code class="mcp-inline">get_symbol_performance</code> / <code class="mcp-inline">get_trading_hours_analysis</code></span></li>
                     <li><i data-feather="chevron-right" style="width:13px;height:13px;color:var(--accent);flex-shrink:0;margin-top:4px;"></i><span><code class="mcp-inline">get_risk_metrics</code> / <code class="mcp-inline">get_position_sizing</code></span></li>
+                    <li><i data-feather="chevron-right" style="width:13px;height:13px;color:var(--accent);flex-shrink:0;margin-top:4px;"></i><span><code class="mcp-inline">get_account_info</code> / <code class="mcp-inline">get_account_balance</code> / <code class="mcp-inline">get_account_equity</code> / <code class="mcp-inline">get_running_profit</code> &mdash; <em style="color:var(--success);">new</em></span></li>
                 </ul>
             </div>
         </div>

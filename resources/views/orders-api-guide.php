@@ -714,6 +714,113 @@ ob_start();
                 <?php endforeach; ?>
             </div>
         </div>
+
+        <!-- Account Info -->
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-5">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #4f46e5, #10b981);">
+                    <i data-feather="user" style="width: 18px; height: 18px; color: white;"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold" style="color: var(--text-primary);">Account Information</h3>
+                    <p class="text-xs" style="color: var(--text-secondary);">Full account snapshot — balance, equity, running P/L, broker, leverage and more</p>
+                </div>
+            </div>
+
+            <!-- Endpoint box -->
+            <div class="p-5 rounded-2xl mb-5" style="background-color: var(--card-bg); border: 1px solid var(--border);">
+                <p class="text-xs font-semibold mb-3" style="color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Endpoint</p>
+                <div class="p-3 rounded-lg api-code text-xs mb-4" style="background-color: var(--input-bg); border: 1px solid var(--input-border); overflow-x: auto;">
+                    <code style="color: var(--accent);"><?= htmlspecialchars($baseUrl) ?>/orders-api-v1/orders-api.php?api_key=<?= htmlspecialchars($apiKey) ?>&amp;account_info=1</code>
+                </div>
+                <p class="text-xs mb-3" style="color: var(--text-secondary);">Returns a live JSON snapshot directly from MT5 via the Orders API EA. Fields included:</p>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                    <?php foreach ([
+                        ['account_number', 'MT5 login / account number'],
+                        ['account_name',   'Name on the account'],
+                        ['broker',         'Broker / company name'],
+                        ['server',         'MT5 trade server'],
+                        ['currency',       'Account base currency'],
+                        ['balance',        'Balance (closed trades)'],
+                        ['equity',         'Equity (balance + float)'],
+                        ['running_profit', 'Total floating P/L'],
+                        ['open_positions', 'Number of open positions'],
+                        ['margin',         'Used margin'],
+                        ['free_margin',    'Available free margin'],
+                        ['margin_level',   'Margin level %'],
+                        ['leverage',       'Account leverage'],
+                        ['trade_mode',     'Real / Demo / Contest'],
+                    ] as [$field, $desc]): ?>
+                    <div class="p-2 rounded-lg" style="background-color: var(--bg-secondary); border: 1px solid var(--border);">
+                        <div class="text-xs font-mono font-semibold mb-0.5" style="color: var(--accent);"><?= $field ?></div>
+                        <div class="text-xs" style="color: var(--text-secondary);"><?= $desc ?></div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <!-- Try it cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="example-card p-5 rounded-2xl" style="background-color: var(--card-bg); border: 1px solid var(--border);">
+                    <div class="flex items-center gap-2 mb-3">
+                        <i data-feather="user" style="width: 15px; height: 15px; color: var(--accent);"></i>
+                        <h4 class="text-sm font-semibold" style="color: var(--text-primary);">Full Account Info</h4>
+                    </div>
+                    <p class="text-xs mb-3" style="color: var(--text-secondary);">All account fields in one call — name, broker, balance, equity, running P/L, margin, leverage</p>
+                    <div class="relative mb-3">
+                        <div class="p-3 rounded-lg api-code text-xs pr-12" style="background-color: var(--input-bg); border: 1px solid var(--input-border); overflow-x: auto;">
+                            <code style="color: var(--text-primary);">?api_key=<?= htmlspecialchars($apiKey) ?>&account_info=1</code>
+                        </div>
+                        <button onclick="copyURL('acct-full', '?api_key=<?= htmlspecialchars($apiKey, ENT_QUOTES) ?>&account_info=1')" class="absolute top-2 right-2 px-2 py-1 rounded-lg text-xs transition-all" style="background-color: var(--bg-secondary); color: var(--text-secondary);" onmouseover="this.style.backgroundColor='var(--bg-tertiary)';" onmouseout="this.style.backgroundColor='var(--bg-secondary)';">
+                            <i data-feather="copy" style="width: 12px; height: 12px;"></i>
+                        </button>
+                    </div>
+                    <div class="flex gap-2 items-center">
+                        <button onclick="testAPI('acct-full', '?api_key=<?= htmlspecialchars($apiKey, ENT_QUOTES) ?>&account_info=1')" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all" style="background-color: var(--accent); color: white;" onmouseover="this.style.opacity='0.9';" onmouseout="this.style.opacity='1';">
+                            <i data-feather="play" class="inline-block mr-1" style="width: 12px; height: 12px;"></i>
+                            Test Request
+                        </button>
+                        <span id="copy-status-acct-full" class="text-xs" style="color: var(--success); display: none;">Copied!</span>
+                    </div>
+                    <div id="response-acct-full" class="hidden mt-3">
+                        <h5 class="text-xs font-semibold mb-2" style="color: var(--text-primary);">Response:</h5>
+                        <pre class="p-3 rounded-lg overflow-x-auto text-xs api-code" style="background-color: var(--bg-primary); border: 1px solid var(--border); max-height: 300px;"><code style="color: var(--text-secondary);"></code></pre>
+                    </div>
+                </div>
+
+                <!-- cURL example -->
+                <div class="p-5 rounded-2xl" style="background-color: var(--card-bg); border: 1px solid var(--border);">
+                    <div class="flex items-center gap-2 mb-3">
+                        <i data-feather="terminal" style="width: 15px; height: 15px; color: var(--success);"></i>
+                        <h4 class="text-sm font-semibold" style="color: var(--text-primary);">cURL Example</h4>
+                    </div>
+                    <p class="text-xs mb-3" style="color: var(--text-secondary);">Run from any terminal</p>
+                    <div class="relative">
+                        <div class="p-3 rounded-lg api-code text-xs" style="background-color: var(--input-bg); border: 1px solid var(--input-border); overflow-x: auto; white-space: pre;"><?= htmlspecialchars('curl "' . $baseUrl . '/orders-api-v1/orders-api.php?api_key=' . $apiKey . '&account_info=1"') ?></div>
+                    </div>
+                    <div class="mt-4 p-3 rounded-lg" style="background-color: var(--bg-secondary); border: 1px solid var(--border);">
+                        <p class="text-xs font-semibold mb-2" style="color: var(--text-primary);">Example response shape:</p>
+                        <pre class="text-xs api-code" style="color: var(--text-secondary); white-space: pre-wrap;">{"request_type": "account_info",
+  "account_info": {
+    "account_number": 123456,
+    "account_name":  "John Doe",
+    "broker":        "ICMarkets",
+    "server":        "ICMarkets-Live03",
+    "currency":      "USD",
+    "balance":       10000.00,
+    "equity":        10234.50,
+    "running_profit":  234.50,
+    "open_positions":  3,
+    "free_margin":   9900.00,
+    "margin_level":  987.65,
+    "leverage":      100,
+    "trade_mode":    "Real"
+  }
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

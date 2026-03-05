@@ -207,6 +207,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['status'=>'ok']);
         exit;
     }
+
+    if ($request_type === 'account_info') {
+        $infoRaw = isset($_POST['account_info']) ? $_POST['account_info'] : '';
+        if (!$infoRaw) {
+            http_response_code(400);
+            echo json_encode(['error'=>'Missing account_info data']);
+            exit;
+        }
+
+        $infoData = json_decode($infoRaw, true);
+        if (!is_array($infoData)) {
+            http_response_code(400);
+            echo json_encode(['error'=>'Invalid account_info JSON']);
+            exit;
+        }
+
+        $responseData = [
+            'request_id'   => $request_id,
+            'request_type' => 'account_info',
+            'account_info' => $infoData
+        ];
+
+        $resFile = "$queueDir/{$request_id}.res.json";
+        if (file_put_contents($resFile, json_encode($responseData, JSON_UNESCAPED_SLASHES)) === false) {
+            echo json_encode(['error' => 'Failed to write response file']);
+            exit;
+        }
+        
+        echo json_encode(['status'=>'ok']);
+        exit;
+    }
 }
 
 // Authentication function - simplified
@@ -248,7 +279,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && empty($_GET)) {
 
 // Client requests
 if (isset($_GET['api_key']) || isset($_GET['action']) || isset($_GET['filter_running']) || 
-    isset($_GET['history']) || isset($_GET['profit'])) {
+    isset($_GET['history']) || isset($_GET['profit']) || isset($_GET['account_info'])) {
     // Authenticate all client requests
     authenticate();
 
@@ -285,6 +316,41 @@ if (isset($_GET['api_key']) || isset($_GET['action']) || isset($_GET['filter_run
 
         http_response_code(504);
         echo json_encode(['error'=>'Timeout waiting for history data']);
+        exit;
+    }
+
+    // Handle account info requests
+    if (isset($_GET['account_info'])) {
+        $request_id = uniqid('acct_', true);
+        $reqFile = "$queueDir/{$request_id}.req.json";
+        $resFile = "$queueDir/{$request_id}.res.json";
+
+        $requestData = [
+            'request_id'   => $request_id,
+            'request_type' => 'account_info'
+        ];
+
+        if (file_put_contents($reqFile, json_encode($requestData, JSON_UNESCAPED_SLASHES)) === false) {
+            echo json_encode(['error' => 'Failed to write request file']);
+            exit;
+        }
+
+        $start   = time();
+        $timeout = 30;
+        while (time() - $start < $timeout) {
+            if (file_exists($resFile)) {
+                $response = json_decode(file_get_contents($resFile), true);
+                if (!empty($response['request_id']) && $response['request_id'] === $request_id) {
+                    @unlink($resFile);
+                    echo json_encode($response, JSON_UNESCAPED_SLASHES);
+                    exit;
+                }
+            }
+            usleep(200000);
+        }
+
+        http_response_code(504);
+        echo json_encode(['error'=>'Timeout waiting for account info']);
         exit;
     }
 
@@ -472,6 +538,7 @@ echo json_encode([
         'last-7days' => '?api_key=KEY&history=last-7days',
         'last-30days' => '?api_key=KEY&history=last-30days'
     ],
+    'account_info_query' => '?api_key=KEY&account_info=1 — Returns account name, broker, balance, equity, running P/L, free margin, leverage, currency',
     'profit_queries' => [
         'today' => '?api_key=KEY&profit=today',
         'last-hour' => '?api_key=KEY&profit=last-hour',
