@@ -1,7 +1,7 @@
 <?php
 /**
  * TMP (Tool Management Protocol) — Database initializer + seeder
- * Creates tool_categories and tools tables, then seeds all 60 tools.
+ * Creates tool_categories and tools tables, then seeds all 64 tools.
  *
  * Run once:  php database/init-tmp-tools.php
  */
@@ -420,7 +420,7 @@ $tools = [
     ],
 
     // =========================================================
-    // CATEGORY: orders  (tools 32-51)
+    // CATEGORY: orders  (tools 32-55)
     // =========================================================
     [
         'category'          => 'orders',
@@ -602,9 +602,45 @@ $tools = [
         'search_phrase'     => 'get profit and loss summary',
         'response_type'     => 'json',
     ],
+    [
+        'category'          => 'orders',
+        'tool_name'         => 'get_account_info',
+        'tool_format'       => '{base_url}/orders-api-v1/orders-api.php?api_key={api_key}&account_info=1',
+        'inputs_explanation'=> "No inputs required — returns a full live snapshot of the MT5 account.",
+        'description'       => 'Get full MT5 account information: account number, name, broker, server, currency, balance, equity, running floating P/L, open positions, margin, free margin, margin level %, leverage, and trade mode (Real/Demo/Contest)',
+        'search_phrase'     => 'get MT5 account information balance equity broker',
+        'response_type'     => 'json',
+    ],
+    [
+        'category'          => 'orders',
+        'tool_name'         => 'get_account_balance',
+        'tool_format'       => '{base_url}/orders-api-v1/orders-api.php?api_key={api_key}&account_info=1',
+        'inputs_explanation'=> "No inputs required — returns full account info including balance field.",
+        'description'       => 'Get the current MT5 account balance (closed-trades balance, not including floating P/L). Also returns currency and equity for context.',
+        'search_phrase'     => 'get account balance MT5',
+        'response_type'     => 'json',
+    ],
+    [
+        'category'          => 'orders',
+        'tool_name'         => 'get_account_equity',
+        'tool_format'       => '{base_url}/orders-api-v1/orders-api.php?api_key={api_key}&account_info=1',
+        'inputs_explanation'=> "No inputs required — returns full account info including equity field.",
+        'description'       => 'Get the current MT5 account equity (balance plus all floating/unrealised P/L from open positions)',
+        'search_phrase'     => 'get account equity MT5',
+        'response_type'     => 'json',
+    ],
+    [
+        'category'          => 'orders',
+        'tool_name'         => 'get_running_profit',
+        'tool_format'       => '{base_url}/orders-api-v1/orders-api.php?api_key={api_key}&account_info=1',
+        'inputs_explanation'=> "No inputs required — returns full account info including running_profit field.",
+        'description'       => 'Get the total floating (unrealised) profit/loss across all currently open MT5 positions, including swap charges',
+        'search_phrase'     => 'get total running floating profit open positions MT5',
+        'response_type'     => 'json',
+    ],
 
     // =========================================================
-    // CATEGORY: market-analysis  (tools 52-54)
+    // CATEGORY: market-analysis  (tools 56-58)
     // =========================================================
     [
         'category'          => 'market-analysis',
