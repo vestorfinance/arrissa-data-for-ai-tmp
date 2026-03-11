@@ -26,6 +26,12 @@ if %ERRORLEVEL% neq 0 (
     exit /b %ERRORLEVEL%
 )
 
+echo Running database migrations...
+php database\run-migrations.php
+if %ERRORLEVEL% neq 0 (
+    echo WARNING: Migration runner reported errors — check output above
+)
+
 echo Update complete.
 
 echo Scheduling Apache restart in 3 seconds...

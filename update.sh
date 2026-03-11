@@ -21,6 +21,10 @@ git clean -fd 2>&1
 # Pull latest code
 git pull origin main 2>&1
 
+# Run any pending database migrations
+echo "Running database migrations..."
+php "$REPO_DIR/database/run-migrations.php" 2>&1
+
 # Gracefully reload Apache so new code is picked up without dropping live connections
 # (SIGUSR1 — child processes finish their current requests before reloading)
 if command -v apache2ctl >/dev/null 2>&1; then
