@@ -40,8 +40,6 @@ $db->query("
 ");
 
 $instances = $db->fetchAll("SELECT * FROM instance_heartbeats ORDER BY last_seen DESC");
-$secretRow = $db->fetchOne("SELECT value FROM settings WHERE key = 'stats_reporting_secret'");
-$secret    = $secretRow ? $secretRow['value'] : '(run the migration script to generate)';
 
 $title = 'Network Stats';
 
@@ -210,49 +208,22 @@ ob_start();
     </div>
     <?php endif; ?>
 
-    <!-- Reporting Secret / setup guide -->
+    <!-- How it works info box -->
     <div class="rounded-2xl p-6" style="background:var(--card-bg);border:1px solid var(--border);">
         <h3 class="text-base font-semibold mb-1 flex items-center gap-2" style="color:var(--text-primary);">
-            <i data-feather="key" style="width:16px;height:16px;color:var(--accent);flex-shrink:0;"></i>
-            Reporting Secret
+            <i data-feather="info" style="width:16px;height:16px;color:var(--accent);flex-shrink:0;"></i>
+            Zero-Config Auto-Connect
         </h3>
-        <p class="text-sm mb-4" style="color:var(--text-secondary);">
-            Add the line below to the <code style="background:var(--bg-secondary);padding:1px 6px;border-radius:4px;">.env</code>
-            file on each instance you want to appear in this dashboard. Instances automatically ping this hub
-            every 5 minutes while the dashboard is open.
-        </p>
-        <div class="flex items-center gap-3">
-            <code id="secret-code" class="flex-1 rounded-xl px-4 py-3 text-sm font-mono select-all break-all"
-                  style="background:var(--bg-secondary);border:1px solid var(--border);color:var(--text-primary);">
-                STATS_REPORTING_SECRET=<?php echo htmlspecialchars($secret); ?>
-            </code>
-            <button onclick="copySecret()" class="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium flex-shrink-0"
-                    style="background:var(--accent);color:#fff;border:none;cursor:pointer;"
-                    title="Copy to clipboard">
-                <i data-feather="copy" style="width:14px;height:14px;"></i>
-                Copy
-            </button>
-        </div>
-        <p class="text-xs mt-3" style="color:var(--text-secondary);">
-            After adding the secret, restart your web server (or just load the dashboard on the other instance) — it will appear here within 5 minutes.
+        <p class="text-sm" style="color:var(--text-secondary);">
+            Every instance running this software automatically reports its stats to this hub every 5 minutes —
+            no manual setup or secret keys required. Just make sure <strong style="color:var(--text-primary);">app_base_url</strong>
+            is correctly set in each instance's Settings page and the instance will appear here automatically.
         </p>
     </div>
 
 </div>
 
 <script>
-function copySecret() {
-    const text = document.getElementById('secret-code').textContent.trim();
-    navigator.clipboard.writeText(text).then(() => {
-        const btn = event.currentTarget;
-        btn.innerHTML = '<i data-feather="check" style="width:14px;height:14px;"></i> Copied';
-        feather.replace();
-        setTimeout(() => {
-            btn.innerHTML = '<i data-feather="copy" style="width:14px;height:14px;"></i> Copy';
-            feather.replace();
-        }, 2000);
-    });
-}
 // Auto-refresh every 30 seconds
 setTimeout(() => location.reload(), 30000);
 </script>
