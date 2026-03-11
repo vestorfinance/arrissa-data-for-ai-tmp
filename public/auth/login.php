@@ -13,7 +13,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Attempt login
     if (Auth::login($username, $password)) {
-        header('Location: /dashboard');
+        $redirect = $_POST['redirect'] ?? '';
+        // Only allow relative paths to prevent open redirect
+        if ($redirect && strpos($redirect, '/') === 0 && strpos($redirect, '//') !== 0) {
+            header('Location: ' . $redirect);
+        } else {
+            header('Location: /dashboard');
+        }
         exit;
     } else {
         header('Location: /login?error=invalid');

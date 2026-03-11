@@ -7,5 +7,11 @@ if (Auth::isAuthenticated()) {
     exit;
 }
 
+// Capture redirect param (relative paths only) and pass to view
+$redirectParam = $_GET['redirect'] ?? '';
+if ($redirectParam && (strpos($redirectParam, '/') !== 0 || strpos($redirectParam, '//') === 0)) {
+    $redirectParam = '';
+}
+
 // Display login page
 require_once __DIR__ . '/../resources/views/login.php';

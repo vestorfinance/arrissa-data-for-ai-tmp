@@ -28,10 +28,14 @@ class Auth {
         return false;
     }
     
-    public static function logout() {
+    public static function logout($redirectAfter = null) {
         self::startSession();
         session_destroy();
-        header('Location: /login');
+        if ($redirectAfter) {
+            header('Location: /login?redirect=' . urlencode($redirectAfter));
+        } else {
+            header('Location: /login');
+        }
         exit;
     }
     
@@ -39,13 +43,15 @@ class Auth {
         self::startSession();
         
         if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
-            header('Location: /login');
+            $currentUrl = ($_SERVER['REQUEST_URI'] ?? '/');
+            header('Location: /login?redirect=' . urlencode($currentUrl));
             exit;
         }
         
         $timeout = 2 * 60 * 60;
         if (isset($_SESSION['login_time']) && (time() - $_SESSION['login_time']) > $timeout) {
-            self::logout();
+            $currentUrl = ($_SERVER['REQUEST_URI'] ?? '/');
+            self::logout($currentUrl);
         }
         
         return true;

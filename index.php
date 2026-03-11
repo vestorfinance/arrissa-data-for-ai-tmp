@@ -181,6 +181,12 @@ if ($uri === '/api/network-stats-data') {
     exit;
 }
 
+// Auth status check — returns JSON {authenticated: bool}, used by client-side session expiry polling
+if ($uri === '/api/auth-status') {
+    include __DIR__ . '/public/api/auth-status.php';
+    exit;
+}
+
 // Front page disabled — redirect to login
 if ($uri === '/') {
     header('Location: /login');

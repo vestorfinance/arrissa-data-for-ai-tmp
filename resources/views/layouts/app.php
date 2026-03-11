@@ -1129,6 +1129,23 @@ _Tz8wKpN4::_v();
                 fetch('/api/instance-heartbeat', { method: 'POST' }).catch(() => {});
             }
         })();
+
+        // ── Session expiry check ──────────────────────────────────────────────
+        // Polls every 60 seconds. If the server says the session has ended,
+        // redirects immediately to /login with the current path as the redirect target.
+        (function() {
+            setInterval(async function() {
+                try {
+                    const res = await fetch('/api/auth-status', { cache: 'no-store' });
+                    if (!res.ok) return;
+                    const data = await res.json();
+                    if (!data.authenticated) {
+                        const redirect = encodeURIComponent(window.location.pathname + window.location.search);
+                        window.location.href = '/login?redirect=' + redirect;
+                    }
+                } catch (e) { /* silent — network hiccup, no forced logout */ }
+            }, 60 * 1000);
+        })();
     </script>
 </body>
 </html>

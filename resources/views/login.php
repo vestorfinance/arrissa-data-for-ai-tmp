@@ -175,6 +175,9 @@
                 <?php endif; ?>
 
                 <form action="/auth/login" method="POST">
+                    <?php if (!empty($redirectParam)): ?>
+                        <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($redirectParam, ENT_QUOTES, 'UTF-8'); ?>">
+                    <?php endif; ?>
                     <!-- Username -->
                     <div class="mb-4">
                         <label class="block text-sm font-medium mb-2" style="color: var(--text-primary);">Username</label>
