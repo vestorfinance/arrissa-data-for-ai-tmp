@@ -79,10 +79,17 @@ ob_start();
             </h1>
             <p style="color:var(--text-secondary);">Live view of all connected Arrissa Data instances</p>
         </div>
-        <button onclick="location.reload()" class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium" style="background:var(--bg-secondary);color:var(--text-secondary);border:1px solid var(--border);">
-            <i data-feather="refresh-cw" style="width:14px;height:14px;"></i>
-            Refresh
-        </button>
+        <div class="flex items-center gap-2">
+            <span id="ping-status" class="text-xs px-3 py-1 rounded-full" style="background:var(--bg-secondary);color:var(--text-secondary);border:1px solid var(--border);">Pinging…</span>
+            <button id="ping-btn" onclick="forcePing()" class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium" style="background:var(--accent);color:#fff;border:none;cursor:pointer;">
+                <i data-feather="zap" style="width:14px;height:14px;"></i>
+                Ping Now
+            </button>
+            <button onclick="location.reload()" class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium" style="background:var(--bg-secondary);color:var(--text-secondary);border:1px solid var(--border);">
+                <i data-feather="refresh-cw" style="width:14px;height:14px;"></i>
+                Refresh
+            </button>
+        </div>
     </div>
 
     <!-- Summary cards -->
@@ -224,8 +231,47 @@ ob_start();
 </div>
 
 <script>
-// Auto-refresh every 30 seconds
-setTimeout(() => location.reload(), 30000);
+function setStatus(msg, color) {
+    const el = document.getElementById('ping-status');
+    el.textContent = msg;
+    el.style.color = color || 'var(--text-secondary)';
+}
+
+function forcePing() {
+    const btn = document.getElementById('ping-btn');
+    btn.disabled = true;
+    setStatus('Pinging…', 'var(--text-secondary)');
+
+    const fd = new FormData();
+    fd.append('force', '1');
+
+    fetch('/api/instance-heartbeat', { method: 'POST', body: fd })
+        .then(r => r.json())
+        .then(data => {
+            btn.disabled = false;
+            if (data.success) {
+                setStatus('Pinged ✓ — refreshing…', 'var(--success)');
+                // Reset localStorage so the background heartbeat also fires fresh
+                localStorage.removeItem('arrissa_hb_ts');
+                setTimeout(() => location.reload(), 1200);
+            } else if (data.skipped) {
+                setStatus('Skipped: ' + (data.reason || 'rate limit'), 'var(--warning)');
+            } else {
+                setStatus('Error: ' + (data.error || data.curl_error || JSON.stringify(data)), 'var(--danger)');
+            }
+        })
+        .catch(e => {
+            btn.disabled = false;
+            setStatus('Request failed', 'var(--danger)');
+        });
+}
+
+// Force ping immediately on page load (bypass localStorage rate limit)
+localStorage.removeItem('arrissa_hb_ts');
+forcePing();
+
+// Auto-refresh every 60 seconds
+setTimeout(() => location.reload(), 60000);
 </script>
 
 <?php

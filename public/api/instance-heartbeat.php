@@ -9,6 +9,7 @@
  *
  * No manual configuration needed — all instances share the same hardcoded network token.
  * Server-side rate-limit: at most once per 5 minutes (lock file).
+ * Pass POST field force=1 to bypass the rate limit (used by the stats page).
  */
 
 // Must match the constant defined in instance-ping.php
@@ -16,14 +17,22 @@ define('ARRISSA_NETWORK_TOKEN', 'arr_net_9c3f2a1e7b4d8f056e2a3c9d1b7e4f8a');
 
 header('Content-Type: application/json');
 
-// Server-side rate limit — max one report per 5 minutes
-$lockFile = sys_get_temp_dir() . '/arrissa_hb_' . md5(__DIR__) . '.lock';
-$lastSent = file_exists($lockFile) ? (int)file_get_contents($lockFile) : 0;
-if (time() - $lastSent < 300) {
-    echo json_encode(['skipped' => true, 'next_in' => 300 - (time() - $lastSent)]);
-    exit;
+$force = !empty($_POST['force']);
+
+// Server-side rate limit — max one report per 5 minutes (skip if force=1)
+if (!$force) {
+    $lockFile = sys_get_temp_dir() . '/arrissa_hb_' . md5(__DIR__) . '.lock';
+    $lastSent = file_exists($lockFile) ? (int)file_get_contents($lockFile) : 0;
+    if (time() - $lastSent < 300) {
+        echo json_encode(['skipped' => true, 'next_in' => 300 - (time() - $lastSent)]);
+        exit;
+    }
+    file_put_contents($lockFile, time());
+} else {
+    // Reset the lock so the next background ping also fires fresh
+    $lockFile = sys_get_temp_dir() . '/arrissa_hb_' . md5(__DIR__) . '.lock';
+    file_put_contents($lockFile, time());
 }
-file_put_contents($lockFile, time());
 
 require_once __DIR__ . '/../../app/Database.php';
 $db = Database::getInstance();
