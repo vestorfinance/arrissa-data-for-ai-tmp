@@ -1,0 +1,768 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw Installation Guide â€” Arrissa Data</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        :root {
+            --bg-primary: #0f0f0f;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent: #4f46e5;
+            --accent-hover: #6366f1;
+            --border: #3a3a3a;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --card-bg: #1f1f1f;
+            --input-bg: #262626;
+            --input-border: #404040;
+            --oc-orange: #f97316;
+            --oc-orange-dark: #ea580c;
+        }
+        * { box-sizing: border-box; scrollbar-width: thin; scrollbar-color: var(--input-border) var(--bg-secondary); }
+        *::-webkit-scrollbar { width: 6px; height: 6px; }
+        *::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        *::-webkit-scrollbar-thumb { background-color: var(--input-border); border-radius: 3px; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background-color: var(--bg-primary); color: var(--text-primary); margin: 0; line-height: 1.6; }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .top-nav { position: sticky; top: 0; z-index: 100; background-color: rgba(15,15,15,0.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); padding: 14px 32px; display: flex; align-items: center; justify-content: space-between; }
+        .nav-logo { display: flex; align-items: center; gap: 12px; }
+        .nav-logo-oc { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--oc-orange), var(--oc-orange-dark)); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.78rem; font-weight: 800; color: #fff; letter-spacing: -0.03em; }
+        .nav-links { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+        .nav-links a { color: var(--text-secondary); font-size: 0.875rem; font-weight: 500; transition: color 0.15s; }
+        .nav-links a:hover { color: var(--text-primary); text-decoration: none; }
+        .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-secondary); font-size: 0.8rem; font-weight: 600; border: 1px solid var(--border); border-radius: 9999px; padding: 6px 14px; transition: all 0.15s; }
+        .back-link:hover { border-color: var(--accent); color: var(--text-primary); text-decoration: none; }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+        .hero { text-align: center; padding: 72px 24px 48px; }
+        .hero h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.03em; margin: 0 0 16px; }
+        .hero p { color: var(--text-secondary); font-size: 1.1rem; max-width: 580px; margin: 0 auto; }
+        .oc-logo-big { width: 72px; height: 72px; border-radius: 24px; background: linear-gradient(135deg, var(--oc-orange), var(--oc-orange-dark)); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 1.4rem; font-weight: 900; color: #fff; letter-spacing: -0.04em; }
+        .configurator { background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 32px; margin-bottom: 48px; }
+        .config-title { font-size: 1rem; font-weight: 700; margin: 0 0 20px; color: var(--text-primary); }
+        .config-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+        @media (max-width: 700px) { .config-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 900px) and (min-width: 701px) { .config-grid { grid-template-columns: 1fr 1fr; } }
+        label.field-label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; }
+        input.text-field { width: 100%; background-color: var(--input-bg); border: 1px solid var(--input-border); border-radius: 9999px; padding: 10px 16px; font-size: 0.875rem; color: var(--text-primary); font-family: inherit; outline: none; transition: border-color 0.15s; }
+        input.text-field:focus { border-color: var(--oc-orange); }
+        .section { margin-bottom: 64px; }
+        .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+        .section-icon { width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .section-header h2 { font-size: 1.5rem; font-weight: 700; margin: 0 0 4px; }
+        .section-header p { font-size: 0.875rem; color: var(--text-secondary); margin: 0; }
+        .steps { display: flex; flex-direction: column; gap: 20px; }
+        .step { background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 24px; }
+        .step-num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--oc-orange), var(--oc-orange-dark)); color: #fff; font-size: 0.75rem; font-weight: 700; margin-right: 10px; flex-shrink: 0; }
+        .step-title { font-size: 1rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; margin-bottom: 12px; }
+        .step-body { font-size: 0.875rem; color: var(--text-secondary); }
+        .step-body p { margin: 0 0 12px; }
+        .step-body p:last-child { margin-bottom: 0; }
+        .code-block { position: relative; background-color: #0d0d0d; border: 1px solid var(--input-border); border-radius: 14px; margin: 12px 0; overflow: hidden; }
+        .code-block pre { margin: 30px 0 0 0; padding: 16px 50px 16px 16px; font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace; font-size: 0.8rem; color: #e2e8f0; overflow-x: auto; white-space: pre; }
+        .code-lang { position: absolute; top: 10px; left: 14px; font-size: 0.65rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; }
+        .copy-btn { position: absolute; top: 8px; right: 10px; background-color: var(--bg-tertiary); border: 1px solid var(--border); color: var(--text-secondary); border-radius: 8px; padding: 5px 10px; font-size: 0.7rem; cursor: pointer; font-family: inherit; font-weight: 600; transition: all 0.15s; display: flex; align-items: center; gap: 4px; }
+        .copy-btn:hover { background-color: var(--oc-orange); color: #fff; border-color: var(--oc-orange); }
+        .copy-btn.copied { background-color: var(--success); color: #fff; border-color: var(--success); }
+        .callout { border-radius: 14px; padding: 14px 16px; margin: 12px 0; display: flex; align-items: flex-start; gap: 12px; font-size: 0.85rem; }
+        .callout-info { background-color: rgba(79,70,229,0.1); border: 1px solid rgba(79,70,229,0.3); color: var(--text-secondary); }
+        .callout-warn { background-color: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.35); color: var(--text-secondary); }
+        .callout-success { background-color: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); color: var(--text-secondary); }
+        .callout-danger { background-color: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: var(--text-secondary); }
+        .callout-icon { flex-shrink: 0; margin-top: 1px; }
+        .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 9999px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+        .badge-accent { background-color: rgba(79,70,229,0.15); color: var(--accent); border: 1px solid rgba(79,70,229,0.3); }
+        .badge-oc { background: linear-gradient(90deg,rgba(249,115,22,0.15),rgba(234,88,12,0.15)); color: var(--oc-orange); border: 1px solid rgba(249,115,22,0.35); }
+        .badge-success { background-color: rgba(16,185,129,0.15); color: var(--success); border: 1px solid rgba(16,185,129,0.3); }
+        .badge-warn { background-color: rgba(245,158,11,0.12); color: var(--warning); border: 1px solid rgba(245,158,11,0.3); }
+        .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 48px 0; }
+        .page-layout { display: flex; gap: 40px; align-items: flex-start; }
+        .toc { width: 220px; flex-shrink: 0; position: sticky; top: 72px; background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 20px; font-size: 0.8rem; }
+        .toc-title { font-weight: 700; color: var(--text-primary); margin-bottom: 12px; font-size: 0.82rem; }
+        .toc a { display: block; color: var(--text-secondary); padding: 5px 0; transition: color 0.15s; }
+        .toc a:hover { color: var(--text-primary); text-decoration: none; }
+        .main-content { flex: 1; min-width: 0; }
+        @media (max-width: 768px) { .toc { display: none; } }
+        code { background-color: var(--bg-tertiary); padding: 2px 7px; border-radius: 5px; font-size: 0.82em; font-family: monospace; color: #fdba74; }
+        footer { border-top: 1px solid var(--border); padding: 32px 24px; text-align: center; color: var(--text-secondary); font-size: 0.8rem; margin-top: 64px; }
+        .hl-domain { color: #a5f3fc; }
+        .hl-ip { color: #fde68a; }
+        .hl-user { color: #86efac; }
+        .guide-card { background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 24px; display: flex; align-items: center; gap: 20px; text-decoration: none; transition: border-color 0.2s, transform 0.15s; }
+        .guide-card:hover { border-color: var(--oc-orange); transform: translateY(-2px); text-decoration: none; }
+        .guide-card-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .guide-card-text h3 { font-size: 1rem; font-weight: 700; color: var(--text-primary); margin: 0 0 4px; }
+        .guide-card-text p { font-size: 0.82rem; color: var(--text-secondary); margin: 0; }
+    </style>
+</head>
+<body>
+
+<!-- Top Nav -->
+<nav class="top-nav">
+    <div class="nav-logo">
+        <div class="nav-logo-oc">OC</div>
+        <span style="font-weight:700;font-size:1rem;">OpenClaw</span>
+        <span class="badge badge-oc" style="margin-left:4px;">Install Guide</span>
+    </div>
+    <div class="nav-links">
+        <a href="/get/n8n-install.html" class="back-link">
+            <i data-feather="zap" style="width:13px;height:13px;"></i> n8n
+        </a>
+        <a href="/get/connect-vps.html" class="back-link">
+            <i data-feather="monitor" style="width:13px;height:13px;"></i> Connect VPS
+        </a>
+        <a href="/get/vps-providers.html" class="back-link">
+            <i data-feather="cloud" style="width:13px;height:13px;"></i> VPS
+        </a>
+        <a href="/get/" class="back-link">
+            <i data-feather="arrow-left" style="width:13px;height:13px;"></i> Guides
+        </a>
+    </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero container" id="hero-top">
+    <div class="oc-logo-big">ðŸ¦ž</div>
+    <h1>OpenClaw Installation Guide</h1>
+    <p>Install OpenClaw â€” your personal AI assistant â€” on Ubuntu VPS with Node.js and Caddy. Runs alongside your existing services without interference.</p>
+</div>
+
+<div class="container">
+
+    <!-- Configurator -->
+    <div class="configurator" id="configure">
+        <p class="config-title"><i data-feather="settings" style="width:16px;height:16px;display:inline;vertical-align:-3px;margin-right:6px;color:var(--oc-orange);"></i>Quick Configurator â€” fill in your server details for personalised commands</p>
+        <div class="config-grid">
+            <div>
+                <label class="field-label" for="domainInput">OpenClaw Domain / Subdomain</label>
+                <input class="text-field" type="text" id="domainInput" placeholder="e.g. ai.yourdomain.com" oninput="updateAll()">
+            </div>
+            <div>
+                <label class="field-label" for="ipInput">Server IP Address</label>
+                <input class="text-field" type="text" id="ipInput" placeholder="e.g. 203.0.113.10" oninput="updateAll()">
+            </div>
+            <div>
+                <label class="field-label" for="userInput">VPS Username</label>
+                <input class="text-field" type="text" id="userInput" placeholder="e.g. ubuntu" oninput="updateAll()">
+            </div>
+        </div>
+        <div class="callout callout-info">
+            <i data-feather="info" class="callout-icon" style="width:16px;height:16px;color:var(--accent);"></i>
+            <span><strong>Safe to install on an existing VPS.</strong> OpenClaw is a Node.js app installed globally via npm. It runs as a user-level systemd service on port <code>18789</code> (loopback only) and does not affect Docker, Caddy, n8n, or any other service.</span>
+        </div>
+    </div>
+
+    <div class="page-layout">
+        <aside class="toc">
+            <div class="toc-title">On This Page</div>
+            <a href="#prerequisites">Prerequisites</a>
+            <a href="#nodejs">Install Node.js</a>
+            <a href="#install">Install OpenClaw</a>
+            <a href="#onboard">Onboard &amp; Configure</a>
+            <a href="#daemon">Run as Daemon</a>
+            <a href="#caddy-setup">Caddy (HTTPS)</a>
+            <a href="#updating">Updating</a>
+            <a href="#troubleshooting">Troubleshooting</a>
+            <a href="#related">Related Guides</a>
+        </aside>
+
+        <div class="main-content">
+
+            <!-- SECTION: Prerequisites -->
+            <div class="section" id="prerequisites">
+                <div class="section-header">
+                    <div class="section-icon" style="background:linear-gradient(135deg,#4f46e5,#6366f1);">
+                        <i data-feather="check-square" style="width:22px;height:22px;color:#fff;"></i>
+                    </div>
+                    <div>
+                        <h2>Prerequisites <span class="badge badge-oc">Ubuntu VPS</span></h2>
+                        <p>What you need before starting</p>
+                    </div>
+                </div>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-title"><span class="step-num">1</span>Requirements</div>
+                        <div class="step-body">
+                            <ul style="margin:0 0 0 16px;padding:0;list-style:disc;line-height:2.2;">
+                                <li>Ubuntu 22.04 LTS or 24.04 (existing VPS is fine)</li>
+                                <li>Minimum 512 MB RAM (1 GB+ recommended)</li>
+                                <li>Root or sudo access</li>
+                                <li>Domain or subdomain with an <strong style="color:var(--text-primary);">A record</strong> pointing to your server â€” e.g. <code class="hl-domain" id="u-domain-txt">ai.yourdomain.com</code> â†’ <code class="hl-ip" id="u-ip-txt">YOUR_IP</code></li>
+                                <li>An AI provider API key (e.g. Anthropic, OpenAI â€” chosen during onboarding)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-title"><span class="step-num">2</span>SSH into your server</div>
+                        <div class="step-body">
+                            <div class="code-block">
+                                <span class="code-lang">bash</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i data-feather="copy" style="width:11px;height:11px;"></i> Copy</button>
+                                <pre id="oc-ssh">ssh ubuntu@YOUR_SERVER_IP</pre>
+                            </div>
+                            <p>All commands below are run on the server after SSH-ing in.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-title"><span class="step-num">3</span>Update system packages</div>
+                        <div class="step-body">
+                            <div class="code-block">
+                                <span class="code-lang">bash</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i data-feather="copy" style="width:11px;height:11px;"></i> Copy</button>
+                                <pre>sudo apt update && sudo apt upgrade -y
+sudo apt install -y curl ca-certificates git</pre>
+                            </div>
+                            <div class="callout callout-warn">
+                                <i data-feather="alert-triangle" class="callout-icon" style="width:16px;height:16px;color:var(--warning);"></i>
+                                <span>If <code>apt upgrade</code> prompts about grub or kernel packages, select <strong>Keep the local version currently installed</strong> to avoid unexpected reboots on a production VPS.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- SECTION: Node.js -->
+            <div class="section" id="nodejs">
+                <div class="section-header">
+                    <div class="section-icon" style="background:linear-gradient(135deg,#16a34a,#15803d);">
+                        <i data-feather="cpu" style="width:22px;height:22px;color:#fff;"></i>
+                    </div>
+                    <div>
+                        <h2>Install Node.js â‰¥ 22</h2>
+                        <p>OpenClaw requires Node.js 22 or newer</p>
+                    </div>
+                </div>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-title"><span class="step-num">1</span>Install Node.js 22 via NodeSource</div>
+                        <div class="step-body">
+                            <div class="code-block">
+                                <span class="code-lang">bash</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i data-feather="copy" style="width:11px;height:11px;"></i> Copy</button>
+                                <pre>curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+sudo apt install -y nodejs</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-title"><span class="step-num">2</span>Verify Node and npm versions</div>
+                        <div class="step-body">
+                            <div class="code-block">
+                                <span class="code-lang">bash</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i data-feather="copy" style="width:11px;height:11px;"></i> Copy</button>
+                                <pre>node --version   # must be v22.x.x or higher
+npm --version</pre>
+                            </div>
+                            <div class="callout callout-info">
+                                <i data-feather="info" class="callout-icon" style="width:16px;height:16px;color:var(--accent);"></i>
+                                <span>If you already have Node.js installed, check the version first. You can skip this step if it's already â‰¥ 22.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- SECTION: Install OpenClaw -->
+            <div class="section" id="install">
+                <div class="section-header">
+                    <div class="section-icon" style="background:linear-gradient(135deg,var(--oc-orange),var(--oc-orange-dark));">
+                        <i data-feather="package" style="width:22px;height:22px;color:#fff;"></i>
+                    </div>
+                    <div>
+                        <h2>Install OpenClaw</h2>
+                        <p>Install the OpenClaw AI assistant globally via npm</p>
+                    </div>
+                </div>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-title"><span class="step-num">1</span>Install globally via npm</div>
+                        <div class="step-body">
+                            <div class="code-block">
+                                <span class="code-lang">bash</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i data-feather="copy" style="width:11px;height:11px;"></i> Copy</button>
+                                <pre>npm install -g openclaw@latest</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-title"><span class="step-num">2</span>Verify the installation</div>
+                        <div class="step-body">
+                            <div class="code-block">
+                                <span class="code-lang">bash</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i data-feather="copy" style="width:11px;height:11px;"></i> Copy</button>
+                                <pre>openclaw --version</pre>
+                            </div>
+                            <div class="callout callout-success">
+                                <i data-feather="check-circle" class="callout-icon" style="width:16px;height:16px;color:var(--success);"></i>
+                                <span>You should see the current OpenClaw version number. The binary is now available globally on your server.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- SECTION: Onboard -->
+            <div class="section" id="onboard">
+                <div class="section-header">
+                    <div class="section-icon" style="background:linear-gradient(135deg,#8b5cf6,#6366f1);">
+                        <i data-feather="settings" style="width:22px;height:22px;color:#fff;"></i>
+                    </div>
+                    <div>
+                        <h2>Onboard &amp; Configure</h2>
+                        <p>Run the setup wizard to connect your AI provider and channels</p>
+                    </div>
+                </div>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-title"><span class="step-num">1</span>Run the onboarding wizard</div>
+                        <div class="step-body">
+                            <div class="code-block">
+                                <span class="code-lang">bash</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i data-feather="copy" style="width:11px;height:11px;"></i> Copy</button>
+                                <pre>openclaw onboard</pre>
+                            </div>
+                            <p>The wizard walks you through:</p>
+                            <ul style="margin:6px 0 0 16px;list-style:disc;line-height:2.2;">
+                                <li>Choosing your AI model provider (Anthropic Claude, OpenAI, etc.)</li>
+                                <li>Setting your API key</li>
+                                <li>Connecting messaging channels (Telegram, WhatsApp, Slack, Discord, etc.)</li>
+                                <li>Optionally installing the Gateway as a background daemon</li>
+                            </ul>
+                            <div class="callout callout-info">
+                                <i data-feather="info" class="callout-icon" style="width:16px;height:16px;color:var(--accent);"></i>
+                                <span>Config is saved to <code>~/.openclaw/openclaw.json</code>. You can edit it manually at any time. Full configuration reference: <a href="https://docs.openclaw.ai/gateway/configuration" target="_blank">docs.openclaw.ai</a></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-title"><span class="step-num">2</span>Test the gateway manually</div>
+                        <div class="step-body">
+                            <p>Start the gateway in verbose mode to confirm it runs before setting it up as a daemon:</p>
+                            <div class="code-block">
+                                <span class="code-lang">bash</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i data-feather="copy" style="width:11px;height:11px;"></i> Copy</button>
+                                <pre>openclaw gateway --port 18789 --verbose</pre>
+                            </div>
+                            <p>You should see the gateway start and bind to <code>127.0.0.1:18789</code>. Press <kbd>Ctrl+C</kbd> to stop â€” next you'll run it as a persistent daemon.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-title"><span class="step-num">3</span>Run the doctor check</div>
+                        <div class="step-body">
+                            <div class="code-block">
+                                <span class="code-lang">bash</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i data-feather="copy" style="width:11px;height:11px;"></i> Copy</button>
+                                <pre>openclaw doctor</pre>
+                            </div>
+                            <p>This checks your config for common issues like missing API keys, misconfigured channels, or risky DM policies.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- SECTION: Daemon -->
+            <div class="section" id="daemon">
+                <div class="section-header">
+                    <div class="section-icon" style="background:linear-gradient(135deg,#0ea5e9,#2563eb);">
+                        <i data-feather="server" style="width:22px;height:22px;color:#fff;"></i>
+                    </div>
+                    <div>
+                        <h2>Run as a Background Daemon</h2>
+                        <p>Keep OpenClaw running 24/7 using a systemd user service</p>
+                    </div>
+                </div>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-title"><span class="step-num">1</span>Install the daemon via the wizard</div>
+                        <div class="step-body">
+                            <p>The easiest way is to let the onboarding wizard install it for you:</p>
+                            <div class="code-block">
+                                <span class="code-lang">bash</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i data-feather="copy" style="width:11px;height:11px;"></i> Copy</button>
+                                <pre>openclaw onboard --install-daemon</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-title"><span class="step-num">2</span>Or create the systemd service manually</div>
+                        <div class="step-body">
+                            <p>If you prefer manual setup:</p>
+                            <div class="code-block">
+                                <span class="code-lang">bash</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i data-feather="copy" style="width:11px;height:11px;"></i> Copy</button>
+                                <pre id="oc-systemd">mkdir -p ~/.config/systemd/user
+tee ~/.config/systemd/user/openclaw.service &lt;&lt;'EOF'
+[Unit]
+Description=OpenClaw Gateway
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/openclaw gateway --port 18789
+Restart=always
+RestartSec=5
+Environment=HOME=/home/ubuntu
+
+[Install]
+WantedBy=default.target
+EOF
+
+systemctl --user daemon-reload
+systemctl --user enable openclaw
+systemctl --user start openclaw
+loginctl enable-linger $USER</pre>
+                            </div>
+                            <div class="callout callout-info">
+                                <i data-feather="info" class="callout-icon" style="width:16px;height:16px;color:var(--accent);"></i>
+                                <span><code>loginctl enable-linger</code> ensures the systemd user session (and OpenClaw) starts on boot even when no user is logged in â€” essential on a VPS.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-title"><span class="step-num">3</span>Check the service is running</div>
+                        <div class="step-body">
+                            <div class="code-block">
+                                <span class="code-lang">bash</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i data-feather="copy" style="width:11px;height:11px;"></i> Copy</button>
+                                <pre>systemctl --user status openclaw
+# View live logs:
+journalctl --user -u openclaw -f</pre>
+                            </div>
+                            <div class="callout callout-success">
+                                <i data-feather="check-circle" class="callout-icon" style="width:16px;height:16px;color:var(--success);"></i>
+                                <span>OpenClaw gateway is now running on <code>127.0.0.1:18789</code>, starts on boot, and restarts automatically if it crashes.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- SECTION: Caddy -->
+            <div class="section" id="caddy-setup">
+                <div class="section-header">
+                    <div class="section-icon" style="background:linear-gradient(135deg,#10b981,#059669);">
+                        <i data-feather="shield" style="width:22px;height:22px;color:#fff;"></i>
+                    </div>
+                    <div>
+                        <h2>Caddy Setup (HTTPS)</h2>
+                        <p>Proxy OpenClaw's web UI to your domain with automatic HTTPS</p>
+                    </div>
+                </div>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-title"><span class="step-num">1</span>Append the OpenClaw block to your Caddyfile</div>
+                        <div class="step-body">
+                            <div class="callout callout-warn" style="margin-bottom:12px;">
+                                <i data-feather="alert-triangle" class="callout-icon" style="width:16px;height:16px;color:var(--warning);"></i>
+                                <span><strong>Do not overwrite your Caddyfile.</strong> If you already have Arrissa Data, n8n, or other apps configured, use <code>tee -a</code> (append) â€” not plain <code>tee</code> â€” so all existing blocks are preserved.</span>
+                            </div>
+
+                            <p style="color:var(--text-primary);font-weight:600;margin-bottom:6px;">Option A â€” No Cloudflare proxy / DNS-only (grey cloud):</p>
+                            <div class="code-block" style="margin-bottom:16px;">
+                                <span class="code-lang">bash</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i data-feather="copy" style="width:11px;height:11px;"></i> Copy</button>
+                                <pre id="oc-caddy">sudo tee -a /etc/caddy/Caddyfile &lt;&lt;'EOF'
+
+ai.yourdomain.com {
+    reverse_proxy localhost:18789
+    encode gzip
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+    }
+}
+EOF
+
+# Verify the full Caddyfile looks correct
+cat /etc/caddy/Caddyfile</pre>
+                            </div>
+
+                            <p style="color:var(--text-primary);font-weight:600;margin-bottom:6px;">Option B â€” Cloudflare proxied (orange cloud):</p>
+                            <div class="code-block" style="margin-bottom:12px;">
+                                <span class="code-lang">bash</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i data-feather="copy" style="width:11px;height:11px;"></i> Copy</button>
+                                <pre id="oc-caddy-cf">sudo tee -a /etc/caddy/Caddyfile &lt;&lt;'EOF'
+
+ai.yourdomain.com {
+    tls internal
+    reverse_proxy localhost:18789
+    encode gzip
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+    }
+}
+EOF
+
+cat /etc/caddy/Caddyfile</pre>
+                            </div>
+                            <div class="callout callout-info">
+                                <i data-feather="info" class="callout-icon" style="width:16px;height:16px;color:var(--accent);"></i>
+                                <span>For Option B set Cloudflare SSL/TLS mode to <strong>Full</strong> (not Flexible, not Full Strict). Run <code>sudo caddy fmt --overwrite /etc/caddy/Caddyfile</code> after appending to auto-format.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-title"><span class="step-num">2</span>Reload Caddy</div>
+                        <div class="step-body">
+                            <div class="code-block">
+                                <span class="code-lang">bash</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i data-feather="copy" style="width:11px;height:11px;"></i> Copy</button>
+                                <pre>sudo systemctl reload caddy</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-title"><span class="step-num">3</span>Open OpenClaw in your browser</div>
+                        <div class="step-body">
+                            <p>Navigate to <a class="hl-domain" id="oc-browser-url" href="#" target="_blank">https://ai.yourdomain.com</a></p>
+                            <p>The OpenClaw web Control UI will load â€” you can manage sessions, view logs, and interact with the assistant from here.</p>
+                            <div class="callout callout-success">
+                                <i data-feather="check-circle" class="callout-icon" style="width:16px;height:16px;color:var(--success);"></i>
+                                <span>OpenClaw is now running on HTTPS with automatic restarts on reboot. Your other services (n8n, Arrissa Data, etc.) continue running on their own subdomains â€” completely untouched.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- SECTION: Updating -->
+            <div class="section" id="updating">
+                <div class="section-header">
+                    <div class="section-icon" style="background:linear-gradient(135deg,#0ea5e9,#2563eb);">
+                        <i data-feather="refresh-cw" style="width:22px;height:22px;color:#fff;"></i>
+                    </div>
+                    <div>
+                        <h2>Updating OpenClaw</h2>
+                        <p>Pull the latest version with a single command</p>
+                    </div>
+                </div>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-title"><span class="step-num">1</span>Update via npm</div>
+                        <div class="step-body">
+                            <div class="code-block">
+                                <span class="code-lang">bash</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i data-feather="copy" style="width:11px;height:11px;"></i> Copy</button>
+                                <pre>npm install -g openclaw@latest
+systemctl --user restart openclaw</pre>
+                            </div>
+                            <div class="callout callout-info">
+                                <i data-feather="info" class="callout-icon" style="width:16px;height:16px;color:var(--accent);"></i>
+                                <span>Or use OpenClaw's built-in update command: <code>openclaw update</code>. After updating, run <code>openclaw doctor</code> to catch any migration issues.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- SECTION: Troubleshooting -->
+            <div class="section" id="troubleshooting">
+                <div class="section-header">
+                    <div class="section-icon" style="background:linear-gradient(135deg,#ef4444,#dc2626);">
+                        <i data-feather="alert-circle" style="width:22px;height:22px;color:#fff;"></i>
+                    </div>
+                    <div>
+                        <h2>Troubleshooting</h2>
+                        <p>Common problems and fixes</p>
+                    </div>
+                </div>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-title"><span class="step-num">!</span>Gateway not accessible after Caddy reload</div>
+                        <div class="step-body">
+                            <p>Confirm OpenClaw is actually listening on port 18789:</p>
+                            <div class="code-block">
+                                <span class="code-lang">bash</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i data-feather="copy" style="width:11px;height:11px;"></i> Copy</button>
+                                <pre>ss -tlnp | grep 18789
+systemctl --user status openclaw</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-title"><span class="step-num">!</span>OpenClaw doesn't start on boot</div>
+                        <div class="step-body">
+                            <p>Make sure linger is enabled for your user:</p>
+                            <div class="code-block">
+                                <span class="code-lang">bash</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i data-feather="copy" style="width:11px;height:11px;"></i> Copy</button>
+                                <pre>loginctl enable-linger $USER
+systemctl --user enable openclaw</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-title"><span class="step-num">!</span>npm: command not found</div>
+                        <div class="step-body">
+                            <p>Node.js was not installed or not in PATH. Re-run the NodeSource install:</p>
+                            <div class="code-block">
+                                <span class="code-lang">bash</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i data-feather="copy" style="width:11px;height:11px;"></i> Copy</button>
+                                <pre>curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+sudo apt install -y nodejs
+node --version</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-title"><span class="step-num">!</span>Permission error installing globally</div>
+                        <div class="step-body">
+                            <div class="code-block">
+                                <span class="code-lang">bash</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i data-feather="copy" style="width:11px;height:11px;"></i> Copy</button>
+                                <pre>sudo npm install -g openclaw@latest</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- SECTION: Related Guides -->
+            <div class="section" id="related">
+                <div class="section-header">
+                    <div class="section-icon" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);">
+                        <i data-feather="book-open" style="width:22px;height:22px;color:#fff;"></i>
+                    </div>
+                    <div>
+                        <h2>Related Guides</h2>
+                        <p>Other pages that go with this setup</p>
+                    </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:16px;">
+                    <a href="/get/n8n-install.html" class="guide-card">
+                        <div class="guide-card-icon" style="background:linear-gradient(135deg,#ea4b71,#ff6d5a);">
+                            <i data-feather="zap" style="width:22px;height:22px;color:#fff;"></i>
+                        </div>
+                        <div class="guide-card-text">
+                            <h3>n8n Installation</h3>
+                            <p>Install n8n workflow automation on the same Ubuntu VPS using Docker and Caddy.</p>
+                        </div>
+                        <i data-feather="arrow-right" style="width:18px;height:18px;color:var(--text-secondary);margin-left:auto;flex-shrink:0;"></i>
+                    </a>
+                    <a href="/get/connect-vps.html" class="guide-card">
+                        <div class="guide-card-icon" style="background:linear-gradient(135deg,#0ea5e9,#2563eb);">
+                            <i data-feather="monitor" style="width:22px;height:22px;color:#fff;"></i>
+                        </div>
+                        <div class="guide-card-text">
+                            <h3>Connect to VPS</h3>
+                            <p>SSH into your server and manage files â€” essential for server administration.</p>
+                        </div>
+                        <i data-feather="arrow-right" style="width:18px;height:18px;color:var(--text-secondary);margin-left:auto;flex-shrink:0;"></i>
+                    </a>
+                    <a href="/get/vps-providers.html" class="guide-card">
+                        <div class="guide-card-icon" style="background:linear-gradient(135deg,#0ea5e9,#4f46e5);">
+                            <i data-feather="cloud" style="width:22px;height:22px;color:#fff;"></i>
+                        </div>
+                        <div class="guide-card-text">
+                            <h3>VPS Providers</h3>
+                            <p>Recommended hosting providers to run your API, n8n, and OpenClaw 24/7.</p>
+                        </div>
+                        <i data-feather="arrow-right" style="width:18px;height:18px;color:var(--text-secondary);margin-left:auto;flex-shrink:0;"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div><!-- /main-content -->
+    </div><!-- /page-layout -->
+
+</div><!-- /container -->
+
+<footer>
+    <p>Arrissa Data API &mdash; <a href="https://arrissa.trade" target="_blank">arrissa.trade</a> &middot; OpenClaw is a personal AI assistant by <a href="https://openclaw.ai" target="_blank">openclaw.ai</a> ðŸ¦ž</p>
+</footer>
+
+<script>
+feather.replace();
+
+function getDomain() { return document.getElementById('domainInput').value.trim() || 'ai.yourdomain.com'; }
+function getIP()     { return document.getElementById('ipInput').value.trim()     || 'YOUR_SERVER_IP'; }
+function getUser()   { return document.getElementById('userInput').value.trim()   || 'ubuntu'; }
+
+function updateAll() {
+    const domain = getDomain();
+    const ip     = getIP();
+    const user   = getUser();
+
+    // SSH command
+    setCode('oc-ssh', () => `ssh ${user}@${ip}`);
+
+    // Prerequisites text highlights
+    setText('u-domain-txt', domain);
+    setText('u-ip-txt', ip);
+
+    // Systemd service â€” replace HOME path
+    setCode('oc-systemd', el => el.textContent
+        .replace(/Environment=HOME=.+/g, `Environment=HOME=/home/${user}`)
+    );
+
+    // Caddy blocks
+    setCode('oc-caddy',    el => el.textContent.replace(/ai\.yourdomain\.com/g, domain));
+    setCode('oc-caddy-cf', el => el.textContent.replace(/ai\.yourdomain\.com/g, domain));
+
+    // Inline browser URL link
+    const url = `https://${domain}`;
+    const browserUrlEl = document.getElementById('oc-browser-url');
+    if (browserUrlEl) { browserUrlEl.textContent = url; browserUrlEl.href = url; }
+}
+
+function setText(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
+function setCode(id, fn)  {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (!el.dataset.orig) el.dataset.orig = el.textContent;
+    el.textContent = fn({ textContent: el.dataset.orig });
+}
+
+function copyCode(btn) {
+    const pre = btn.closest('.code-block').querySelector('pre');
+    navigator.clipboard.writeText(pre.textContent).then(() => {
+        btn.classList.add('copied');
+        btn.innerHTML = '<i data-feather="check" style="width:11px;height:11px;"></i> Copied!';
+        feather.replace();
+        setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.innerHTML = '<i data-feather="copy" style="width:11px;height:11px;"></i> Copy';
+            feather.replace();
+        }, 2000);
+    });
+}
+
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+});
+
+updateAll();
+</script>
+</body>
+</html>

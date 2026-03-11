@@ -163,6 +163,18 @@ if ($uri === '/api/check-update') {
     exit;
 }
 
+// Instance ping — receives heartbeat stats from remote instances (arrissadata.com only)
+if ($uri === '/api/instance-ping') {
+    include __DIR__ . '/public/api/instance-ping.php';
+    exit;
+}
+
+// Instance heartbeat proxy — gathers local stats and forwards to the hub
+if ($uri === '/api/instance-heartbeat') {
+    include __DIR__ . '/public/api/instance-heartbeat.php';
+    exit;
+}
+
 // Front page disabled — redirect to login
 if ($uri === '/') {
     header('Location: /login');
@@ -252,6 +264,9 @@ switch ($uri) {
         break;
     case '/chat':
         $page = 'chat';
+        break;
+    case '/network-stats':
+        $page = 'network-stats';
         break;
     case '/economic-calendar':
         $page = 'economic-calendar';

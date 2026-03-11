@@ -58,6 +58,29 @@ try {
         )
     ");
 
+    // ── Instance heartbeats table ─────────────────────────────────────────────
+    $db->exec("
+        CREATE TABLE IF NOT EXISTS instance_heartbeats (
+            id            INTEGER PRIMARY KEY AUTOINCREMENT,
+            instance_key  TEXT    NOT NULL UNIQUE,
+            instance_url  TEXT    NOT NULL,
+            instance_name TEXT,
+            php_version   TEXT,
+            os_platform   TEXT,
+            cpu_load      REAL,
+            ram_total     INTEGER,
+            ram_used      INTEGER,
+            ram_pct       REAL,
+            disk_total    INTEGER,
+            disk_used     INTEGER,
+            disk_pct      REAL,
+            uptime_s      INTEGER,
+            app_version   TEXT,
+            first_seen    DATETIME DEFAULT CURRENT_TIMESTAMP,
+            last_seen     DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    ");
+
     // ── TMP tables ────────────────────────────────────────────────────────────
     $db->exec("
         CREATE TABLE IF NOT EXISTS tool_categories (
@@ -103,6 +126,7 @@ try {
         'chat_initial_messages'   => json_encode(['Hello! I\'m Arrissa AI. How can I help you today?', 'Feel free to ask me anything.']),
         'chat_enable_streaming'   => '0',
         'chat_available_models'   => json_encode(['analysis-model-1' => 'Analysis Model 1', 'analysis-model-2' => 'Analysis Model 2', 'analysis-model-3' => 'Analysis Model 3']),
+        'stats_reporting_secret'  => bin2hex(random_bytes(32)),
     ];
     foreach ($defaults as $key => $value) {
         $db->exec("INSERT OR IGNORE INTO settings (key, value) VALUES ('$key', '" . SQLite3::escapeString($value) . "')");

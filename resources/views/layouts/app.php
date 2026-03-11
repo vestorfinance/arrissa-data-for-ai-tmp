@@ -869,6 +869,15 @@ _Tz8wKpN4::_v();
                     <i data-feather="download" style="width: 20px; height: 20px;"></i>
                     <span class="text-base font-medium">Download EAs</span>
                 </a>
+                <?php
+                $currentHostForNav = strtolower(preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST'] ?? ''));
+                if ($currentHostForNav === 'arrissadata.com' || $currentHostForNav === 'www.arrissadata.com'):
+                ?>
+                <a href="/network-stats" class="sidebar-link <?php echo ($page ?? '') == 'network-stats' ? 'active' : ''; ?> flex items-center space-x-3 px-4 py-2 rounded-full mb-1" style="color: <?php echo ($page ?? '') == 'network-stats' ? 'var(--text-primary)' : 'var(--text-secondary)'; ?>;">
+                    <i data-feather="globe" style="width: 20px; height: 20px;"></i>
+                    <span class="text-base font-medium">Network Stats</span>
+                </a>
+                <?php endif; ?>
             </nav>
 
             <!-- Settings -->
@@ -1106,6 +1115,19 @@ _Tz8wKpN4::_v();
                     window.location.href = 'https://arrissa.com';
                 }
             };
+        })();
+
+        // ── Instance heartbeat ────────────────────────────────────────────────
+        // Fires at most once every 5 minutes. The server-side endpoint
+        // collects system stats and reports them to the arrissadata.com hub.
+        (function() {
+            const HB_KEY      = 'arrissa_hb_ts';
+            const HB_INTERVAL = 5 * 60 * 1000; // 5 minutes
+            const last        = parseInt(localStorage.getItem(HB_KEY) || '0');
+            if (Date.now() - last >= HB_INTERVAL) {
+                localStorage.setItem(HB_KEY, Date.now().toString());
+                fetch('/api/instance-heartbeat', { method: 'POST' }).catch(() => {});
+            }
         })();
     </script>
 </body>
