@@ -91,6 +91,7 @@ $ema1Period  = isset($_GET['ema1_period']) ? (int)$_GET['ema1_period'] : 0;
 $ema2Period  = isset($_GET['ema2_period']) ? (int)$_GET['ema2_period'] : 0;
 $atrPeriod   = isset($_GET['atr'])         ? (int)$_GET['atr']         : 0;
 $dataField   = $_GET['data']         ?? null;
+$returnJson  = ($dataField === 'json');  // return JSON envelope instead of raw PNG
 $showFib     = isset($_GET['fib']) && $_GET['fib'] === 'true';
 $periodSeparators = $_GET['period_separators'] ?? null;
 $showHighLow = isset($_GET['high_low']) && $_GET['high_low'] === 'true';
@@ -181,7 +182,7 @@ if ($entryTime)   $pretendTime = $entryTime;
 if ($pretendDate)  $params['pretend_date'] = $pretendDate;
 if ($pretendTime)  $params['pretend_time'] = $pretendTime;
 if ($rangeType)    $params['rangeType']   = $rangeType;
-if ($dataField)    $params['data']        = $dataField;
+if ($dataField && !$returnJson) $params['data'] = $dataField; // don't forward data=json sentinel
 
 $apiUrl = $BASE_URL . '/market-data-api-v1/market-data-api.php?' . http_build_query($params);
 $raw    = @file_get_contents($apiUrl);
@@ -1110,6 +1111,10 @@ if ($showHighLow && !empty($periodHighLows)) {
 //////////////////////////
 // 26) SL/TP Trade Level Overlays
 //////////////////////////
+// Initialise outside block so they are available for JSON output below
+$tradeOutcome = null; // 'tp', 'sl', or null
+$isBuy        = null;
+
 if ($entryPrice !== null && $slPrice !== null && $tpPrice !== null) {
     // Find the closest candle to entry_date + entry_time
     $entryIdx = 0;
@@ -1360,9 +1365,64 @@ $rangeX = intval(($W - $rangeDims['width']) / 2);
 imagettftext($img, $rangeFontSize, 0, $rangeX, $H - 20, $textColor, $fontRegular, $rangeText);
 
 //////////////////////////
-// 28) Output PNG
+// 28) Output PNG  —— or JSON envelope when data=json
 //////////////////////////
-header('Content-Type: image/png');
-imagepng($img);
-imagedestroy($img);
+if ($returnJson) {
+    // Capture rendered chart as PNG bytes
+    ob_start();
+    imagepng($img);
+    $pngBytes = ob_get_clean();
+    imagedestroy($img);
+
+    // ---------------------------------------------------------------
+    // Point-size is derived directly from the price precision that was
+    // already calculated in section 8 from the actual candle prices.
+    //   5 dp  (EURUSD, GBPUSD …) → pointSize = 0.00001
+    //   3 dp  (USDJPY, XAUUSD …) → pointSize = 0.001
+    //   2 dp  (indices, CFDs …)  → pointSize = 0.01
+    //   etc.
+    // ---------------------------------------------------------------
+    $pointSize = pow(10, -$precision);
+
+    // Calculate gain in points and result label
+    $gainPoints  = null;
+    $resultLabel = null;
+    if ($entryPrice !== null && $slPrice !== null && $tpPrice !== null) {
+        if ($tradeOutcome === 'tp') {
+            $resultLabel = 'tp-hit';
+            $gainPoints  = $isBuy
+                ? round(($tpPrice    - $entryPrice) / $pointSize)
+                : round(($entryPrice - $tpPrice)    / $pointSize);
+        } elseif ($tradeOutcome === 'sl') {
+            $resultLabel = 'sl-hit';
+            $gainPoints  = $isBuy
+                ? round(($slPrice    - $entryPrice) / $pointSize)
+                : round(($entryPrice - $slPrice)    / $pointSize);
+        } else {
+            // Neither hit yet — show live P&L vs last candle close
+            $resultLabel = 'running';
+            $lastCloseForJson = (float)$candles[$n - 1]['close'];
+            $gainPoints  = $isBuy
+                ? round(($lastCloseForJson - $entryPrice) / $pointSize)
+                : round(($entryPrice - $lastCloseForJson) / $pointSize);
+        }
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode([
+        'image'       => 'data:image/png;base64,' . base64_encode($pngBytes),
+        'entry_price' => $entryPrice,
+        'sl'          => $slPrice,
+        'tp'          => $tpPrice,
+        'result'      => $resultLabel,
+        'gain'        => $gainPoints,   // positive = profit, negative = loss
+        'point_size'  => $pointSize,
+        'precision'   => $precision,
+        'direction'   => ($isBuy === null ? null : ($isBuy ? 'buy' : 'sell')),
+    ]);
+} else {
+    header('Content-Type: image/png');
+    imagepng($img);
+    imagedestroy($img);
+}
 ?>

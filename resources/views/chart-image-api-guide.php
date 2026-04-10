@@ -532,11 +532,21 @@ ob_start();
                             <td class="py-4 px-6"><span class="px-3 py-1 rounded-full text-xs font-semibold" style="background-color: var(--input-bg); color: var(--text-secondary);">Optional</span></td>
                             <td class="py-4 px-6" style="color: var(--text-secondary);">Take profit price. Draws a teal dashed line with green shaded reward zone between entry and TP.</td>
                         </tr>
-                        <tr>
+                        <tr style="border-bottom: 1px solid var(--border);">
                             <td class="py-4 px-6"><code class="px-3 py-1.5 rounded-full text-xs font-semibold" style="background-color: rgba(38,166,154,0.15); color: #26a69a;">forward</code></td>
                             <td class="py-4 px-6" style="color: var(--text-secondary);">integer</td>
                             <td class="py-4 px-6"><span class="px-3 py-1 rounded-full text-xs font-semibold" style="background-color: var(--input-bg); color: var(--text-secondary);">Optional</span></td>
                             <td class="py-4 px-6" style="color: var(--text-secondary);">Number of candles to load <strong>after</strong> entry time to show how the trade played out. The diagonal dashed line ends at the first candle that hits TP or SL, or at the last close if neither was hit.</td>
+                        </tr>
+                        <!-- Response Format -->
+                        <tr style="border-bottom: 1px solid var(--border); background-color: rgba(99,102,241,0.04);">
+                            <td class="py-4 px-6" colspan="4"><span class="text-xs font-bold uppercase tracking-wider" style="color: #6366f1;">Response Format</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-6"><code class="px-3 py-1.5 rounded-full text-xs font-semibold" style="background-color: rgba(99,102,241,0.15); color: #6366f1;">data</code></td>
+                            <td class="py-4 px-6" style="color: var(--text-secondary);">string</td>
+                            <td class="py-4 px-6"><span class="px-3 py-1 rounded-full text-xs font-semibold" style="background-color: var(--input-bg); color: var(--text-secondary);">Optional</span></td>
+                            <td class="py-4 px-6" style="color: var(--text-secondary);">Set to <code>json</code> to return a JSON envelope instead of a raw PNG. Includes the chart as a Base64 PNG, entry/SL/TP prices, result (<code>tp-hit</code> / <code>sl-hit</code> / <code>running</code>), and gain in points. Without this parameter the response is always <code>image/png</code>.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -612,6 +622,80 @@ ob_start();
             <p class="text-xs mb-3" style="color: var(--text-secondary);">Loads 100 candles after entry. Diagonal ends at the candle where price first hits TP or SL.</p>
             <div class="p-4 rounded-xl api-code text-xs overflow-x-auto" style="background-color: var(--bg-primary); color: var(--accent); border: 1px solid var(--input-border);">
                 <pre style="margin:0;white-space:pre-wrap;word-wrap:break-word;"><?php echo htmlspecialchars($baseUrl); ?>/chart-image-api-v1/chart-image-api.php?api_key=<?php echo htmlspecialchars($apiKey); ?>&amp;symbol=BTCUSD&amp;timeframe=M1&amp;count=60&amp;entry_price=67826.31&amp;entry_date=2026-03-31&amp;entry_time=20:00&amp;sl=67454.80&amp;tp=68292.46&amp;forward=100</pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- JSON Response Section -->
+    <div class="mb-10">
+        <div class="flex items-center mb-6">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mr-4" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+                <i data-feather="code" style="width: 24px; height: 24px; color: white;"></i>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold" style="color: var(--text-primary);">JSON Response Mode</h2>
+                <p class="text-sm" style="color: var(--text-secondary);">Add <code>data=json</code> to receive a structured JSON envelope instead of a raw PNG</p>
+            </div>
+        </div>
+
+        <!-- What changes -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="p-5 rounded-2xl" style="background-color: var(--card-bg); border: 1px solid var(--border);">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center mb-3" style="background-color: rgba(99,102,241,0.2);">
+                    <i data-feather="image" style="width: 16px; height: 16px; color: #6366f1;"></i>
+                </div>
+                <h4 class="text-sm font-semibold mb-1" style="color: var(--text-primary);">Base64 Image</h4>
+                <p class="text-xs" style="color: var(--text-secondary);">The full chart PNG is included as a <code>data:image/png;base64,…</code> string — embed directly in <code>&lt;img src&gt;</code> or save to file.</p>
+            </div>
+            <div class="p-5 rounded-2xl" style="background-color: var(--card-bg); border: 1px solid var(--border);">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center mb-3" style="background-color: rgba(38,166,154,0.2);">
+                    <i data-feather="trending-up" style="width: 16px; height: 16px; color: #26a69a;"></i>
+                </div>
+                <h4 class="text-sm font-semibold mb-1" style="color: var(--text-primary);">Trade Result</h4>
+                <p class="text-xs" style="color: var(--text-secondary);"><code>result</code> is <code>tp-hit</code>, <code>sl-hit</code>, or <code>running</code>. <code>gain</code> is the P&amp;L in points (positive&nbsp;=&nbsp;profit, negative&nbsp;=&nbsp;loss).</p>
+            </div>
+            <div class="p-5 rounded-2xl" style="background-color: var(--card-bg); border: 1px solid var(--border);">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center mb-3" style="background-color: rgba(99,102,241,0.2);">
+                    <i data-feather="sliders" style="width: 16px; height: 16px; color: #6366f1;"></i>
+                </div>
+                <h4 class="text-sm font-semibold mb-1" style="color: var(--text-primary);">Auto Point Size</h4>
+                <p class="text-xs" style="color: var(--text-secondary);">Point size and decimal precision are detected automatically from the instrument's actual price data — EURUSD&nbsp;5dp, USDJPY&nbsp;3dp, indices&nbsp;2dp, etc.</p>
+            </div>
+        </div>
+
+        <!-- Example request -->
+        <div class="p-6 rounded-2xl mb-4" style="background-color: var(--card-bg); border: 1px solid var(--border);">
+            <h3 class="text-base font-semibold mb-3" style="color: var(--text-primary);">Example Request — EURUSD buy trade with outcome</h3>
+            <p class="text-xs mb-3" style="color: var(--text-secondary);">Same as a normal SL/TP chart request — just append <code>&amp;data=json</code>. Include <code>forward</code> to resolve TP/SL hit.</p>
+            <div class="p-4 rounded-xl api-code text-xs overflow-x-auto mb-2" style="background-color: var(--bg-primary); color: var(--accent); border: 1px solid var(--input-border);">
+                <pre style="margin:0;white-space:pre-wrap;word-wrap:break-word;"><?php echo htmlspecialchars($baseUrl); ?>/chart-image-api-v1/chart-image-api.php?api_key=<?php echo htmlspecialchars($apiKey); ?>&amp;symbol=EURUSD&amp;timeframe=H1&amp;count=60&amp;entry_price=1.08450&amp;entry_date=2026-03-10&amp;entry_time=09:00&amp;sl=1.08200&amp;tp=1.09100&amp;forward=100&amp;data=json</pre>
+            </div>
+        </div>
+
+        <!-- Example response -->
+        <div class="p-6 rounded-2xl" style="background-color: var(--card-bg); border: 1px solid var(--border);">
+            <h3 class="text-base font-semibold mb-3" style="color: var(--text-primary);">Example Response</h3>
+            <p class="text-xs mb-3" style="color: var(--text-secondary);"><code>Content-Type: application/json</code></p>
+            <div class="p-4 rounded-xl api-code text-xs overflow-x-auto" style="background-color: var(--bg-primary); color: var(--success); border: 1px solid var(--input-border);">
+                <pre style="margin:0;">{
+  "image":       "data:image/png;base64,iVBORw0KGgo...",
+  "entry_price": 1.0845,
+  "sl":          1.082,
+  "tp":          1.091,
+  "result":      "tp-hit",
+  "gain":        650,
+  "point_size":  0.00001,
+  "precision":   5,
+  "direction":   "buy"
+}</pre>
+            </div>
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3 text-xs" style="color: var(--text-secondary);">
+                <div><code style="color:var(--text-primary);">result</code> — <code>tp-hit</code> | <code>sl-hit</code> | <code>running</code></div>
+                <div><code style="color:var(--text-primary);">gain</code> — P&amp;L in points. Positive&nbsp;=&nbsp;profit, negative&nbsp;=&nbsp;loss.</div>
+                <div><code style="color:var(--text-primary);">point_size</code> — e.g. <code>0.00001</code> for 5-digit FX, <code>0.001</code> for JPY pairs</div>
+                <div><code style="color:var(--text-primary);">direction</code> — <code>buy</code> or <code>sell</code>, inferred from TP vs entry price</div>
             </div>
         </div>
     </div>
