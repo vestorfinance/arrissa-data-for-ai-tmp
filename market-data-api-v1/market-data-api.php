@@ -675,10 +675,6 @@ if ($symbol && $rangeType) {
     $start   = time();
     $timeout = 30;
     while (time() - $start < $timeout) {
-        // If our req file was garbage-collected by another process, abort early
-        if (!file_exists($reqFile) && !file_exists($resFile)) {
-            break;
-        }
         if (file_exists($resFile)) {
             $response = json_decode(file_get_contents($resFile), true);
             if (!empty($response['request_id']) && $response['request_id'] === $request_id) {
@@ -826,10 +822,6 @@ elseif ($symbol && $timeframe && $count) {
     $start   = time();
     $timeout = 30;
     while (time() - $start < $timeout) {
-        // If our req file was garbage-collected by another process, abort early
-        if (!file_exists($reqFile) && !file_exists($resFile)) {
-            break;
-        }
         if (file_exists($resFile)) {
             $response = json_decode(file_get_contents($resFile), true);
             if (!empty($response['request_id']) && $response['request_id'] === $request_id) {
