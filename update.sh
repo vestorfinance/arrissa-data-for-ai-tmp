@@ -21,6 +21,10 @@ git clean -fd 2>&1
 # Pull latest code
 git pull origin main 2>&1
 
+# Fix permissions on queue and database directories
+echo "Fixing permissions..."
+bash "$REPO_DIR/fix-permissions.sh" 2>&1
+
 # Run any pending database migrations
 echo "Running database migrations..."
 php "$REPO_DIR/database/run-migrations.php" 2>&1
