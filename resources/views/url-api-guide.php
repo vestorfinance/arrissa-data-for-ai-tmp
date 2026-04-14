@@ -236,9 +236,7 @@ ob_start();
                         <span class="section-badge mr-2" style="background: rgba(239,68,68,0.15); color:#ef4444;">Reuters</span>
                         <span class="text-xs" style="color:var(--text-muted);">World Economy News</span>
                     </div>
-                    <pre class="p-3 rounded-lg overflow-x-auto api-code" style="background-color: var(--bg-primary); border: 1px solid var(--border); color: var(--text-secondary); white-space: pre-wrap; word-break: break-all; font-size:0.72rem;"><?php echo htmlspecialchars($baseUrl); ?>/api/url-api
-  ?api_key=<?php echo htmlspecialchars($apiKey); ?>
-  &url=https://www.reuters.com/markets/econ-world/</pre>
+                    <pre class="p-3 rounded-lg overflow-x-auto api-code" style="background-color: var(--bg-primary); border: 1px solid var(--border); color: var(--text-secondary); white-space: pre-wrap; word-break: break-all; font-size:0.72rem;"><?php echo htmlspecialchars($baseUrl); ?>/api/url-api?api_key=<?php echo htmlspecialchars($apiKey); ?>&url=https://www.reuters.com/markets/econ-world/</pre>
                     <p class="text-xs mt-2" style="color:var(--text-secondary);">Returns <code style="color:var(--accent);">"source_name": "Reuters"</code> — global economic &amp; market news headlines.</p>
                 </div>
                 <!-- Yahoo Finance -->
@@ -247,9 +245,7 @@ ob_start();
                         <span class="section-badge mr-2" style="background: rgba(99,102,241,0.15); color:#818cf8;">Yahoo Finance</span>
                         <span class="text-xs" style="color:var(--text-muted);">Economy Topic Feed</span>
                     </div>
-                    <pre class="p-3 rounded-lg overflow-x-auto api-code" style="background-color: var(--bg-primary); border: 1px solid var(--border); color: var(--text-secondary); white-space: pre-wrap; word-break: break-all; font-size:0.72rem;"><?php echo htmlspecialchars($baseUrl); ?>/api/url-api
-  ?api_key=<?php echo htmlspecialchars($apiKey); ?>
-  &url=https://sg.finance.yahoo.com/topic/economy/</pre>
+                    <pre class="p-3 rounded-lg overflow-x-auto api-code" style="background-color: var(--bg-primary); border: 1px solid var(--border); color: var(--text-secondary); white-space: pre-wrap; word-break: break-all; font-size:0.72rem;"><?php echo htmlspecialchars($baseUrl); ?>/api/url-api?api_key=<?php echo htmlspecialchars($apiKey); ?>&url=https://sg.finance.yahoo.com/topic/economy/</pre>
                     <p class="text-xs mt-2" style="color:var(--text-secondary);">Returns <code style="color:var(--accent);">"source_name": "Yahoo Finance"</code> — economy topic articles &amp; summaries.</p>
                 </div>
             </div>
@@ -263,10 +259,7 @@ ob_start();
                     <i data-feather="globe" class="mr-3" style="width:18px;height:18px;color:var(--accent);"></i>
                     <h4 class="font-semibold" style="color:var(--text-primary);">Basic — Public URL</h4>
                 </div>
-                <pre class="p-4 rounded-xl overflow-x-auto api-code" style="background-color: var(--bg-primary); border: 1px solid var(--border); color: var(--text-secondary); white-space: pre-wrap; word-break: break-all;"><?php echo htmlspecialchars($baseUrl); ?>/api/url-api
-  ?api_key=<?php echo htmlspecialchars($apiKey); ?>
-
-  &url=https://example.com</pre>
+                <pre class="p-4 rounded-xl overflow-x-auto api-code" style="background-color: var(--bg-primary); border: 1px solid var(--border); color: var(--text-secondary); white-space: pre-wrap; word-break: break-all;"><?php echo htmlspecialchars($baseUrl); ?>/api/url-api?api_key=<?php echo htmlspecialchars($apiKey); ?>&url=https://example.com</pre>
             </div>
 
             <!-- Bearer Token -->
@@ -275,11 +268,7 @@ ob_start();
                     <i data-feather="shield" class="mr-3" style="width:18px;height:18px;color:var(--accent);"></i>
                     <h4 class="font-semibold" style="color:var(--text-primary);">Bearer Token Auth (target site)</h4>
                 </div>
-                <pre class="p-4 rounded-xl overflow-x-auto api-code" style="background-color: var(--bg-primary); border: 1px solid var(--border); color: var(--text-secondary); white-space: pre-wrap; word-break: break-all;"><?php echo htmlspecialchars($baseUrl); ?>/api/url-api
-  ?api_key=<?php echo htmlspecialchars($apiKey); ?>
-
-  &url=https://api.example.com/data
-  &bearer_token=your_target_token</pre>
+                <pre class="p-4 rounded-xl overflow-x-auto api-code" style="background-color: var(--bg-primary); border: 1px solid var(--border); color: var(--text-secondary); white-space: pre-wrap; word-break: break-all;"><?php echo htmlspecialchars($baseUrl); ?>/api/url-api?api_key=<?php echo htmlspecialchars($apiKey); ?>&url=https://api.example.com/data&bearer_token=your_target_token</pre>
             </div>
 
             <!-- Basic HTTP Auth -->
@@ -288,12 +277,7 @@ ob_start();
                     <i data-feather="user-check" class="mr-3" style="width:18px;height:18px;color:var(--accent);"></i>
                     <h4 class="font-semibold" style="color:var(--text-primary);">Basic HTTP Auth (target site)</h4>
                 </div>
-                <pre class="p-4 rounded-xl overflow-x-auto api-code" style="background-color: var(--bg-primary); border: 1px solid var(--border); color: var(--text-secondary); white-space: pre-wrap; word-break: break-all;"><?php echo htmlspecialchars($baseUrl); ?>/api/url-api
-  ?api_key=<?php echo htmlspecialchars($apiKey); ?>
-
-  &url=https://protected.example.com/page
-  &auth_user=myuser
-  &auth_pass=mypassword</pre>
+                <pre class="p-4 rounded-xl overflow-x-auto api-code" style="background-color: var(--bg-primary); border: 1px solid var(--border); color: var(--text-secondary); white-space: pre-wrap; word-break: break-all;"><?php echo htmlspecialchars($baseUrl); ?>/api/url-api?api_key=<?php echo htmlspecialchars($apiKey); ?>&url=https://protected.example.com/page&auth_user=myuser&auth_pass=mypassword</pre>
             </div>
 
             <!-- Custom Headers -->
@@ -302,11 +286,7 @@ ob_start();
                     <i data-feather="settings" class="mr-3" style="width:18px;height:18px;color:var(--accent);"></i>
                     <h4 class="font-semibold" style="color:var(--text-primary);">Custom Headers (target site)</h4>
                 </div>
-                <pre class="p-4 rounded-xl overflow-x-auto api-code" style="background-color: var(--bg-primary); border: 1px solid var(--border); color: var(--text-secondary); white-space: pre-wrap; word-break: break-all;"><?php echo htmlspecialchars($baseUrl); ?>/api/url-api
-  ?api_key=<?php echo htmlspecialchars($apiKey); ?>
-
-  &url=https://api.example.com/feed
-  &custom_headers={"X-Token":"abc","X-App":"myapp"}</pre>
+                <pre class="p-4 rounded-xl overflow-x-auto api-code" style="background-color: var(--bg-primary); border: 1px solid var(--border); color: var(--text-secondary); white-space: pre-wrap; word-break: break-all;"><?php echo htmlspecialchars($baseUrl); ?>/api/url-api?api_key=<?php echo htmlspecialchars($apiKey); ?>&url=https://api.example.com/feed&custom_headers={"X-Token":"abc","X-App":"myapp"}</pre>
             </div>
 
         </div>
